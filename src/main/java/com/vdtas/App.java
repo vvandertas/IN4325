@@ -1,18 +1,23 @@
 package com.vdtas;
 
 import org.jooby.Jooby;
+import org.jooby.ftl.Ftl;
 import org.jooby.livereload.LiveReload;
 import org.jooby.json.Gzon;
-
 
 /**
  * @author vvandertas
  */
 public class App extends Jooby {
+
   {
-    // live reload ftw
+    // template engine
+    use(new Ftl());
+
+    // live reload
     use(new LiveReload());
 
+   // Jooby gson
     use(new Gzon());
 
     // set port to what Bing Search API wants to see
@@ -22,16 +27,9 @@ public class App extends Jooby {
     assets("/assets/css/**");
     assets("/assets/js/**");
 
-    // static homepage
-    assets("/", "bing.html");
-
+    // MVC routing
+    use(ViewController.class);
     use(BingSearch.class);
-    // route for processing search request
-//    get("/search" ,(req) -> {
-//      BingSearch bingSearch = req.require(BingSearch.class);
-//      return bingSearch.processRequest(req);
-//    });
-
   }
 
   public static void main(final String[] args) {

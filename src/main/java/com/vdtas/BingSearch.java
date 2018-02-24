@@ -7,10 +7,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.net.ssl.HttpsURLConnection;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.vdtas.helpers.SessionHelper;
 import com.vdtas.models.SearchResults;
 import org.jooby.Request;
@@ -45,7 +41,6 @@ public class BingSearch {
 
     SearchResults result = new SearchResults();
     System.out.println("Received request");
-    System.out.println("Using key: " + subscriptionKey);
 
     try {
       String query = request.param("query").value();
@@ -98,13 +93,5 @@ public class BingSearch {
 
     stream.close();
     return results;
-  }
-
-  // pretty-printer for JSON; uses GSON parser to parse and re-serialize
-  public static String prettify(String json_text) {
-    JsonParser parser = new JsonParser();
-    JsonObject json = parser.parse(json_text).getAsJsonObject();
-    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    return gson.toJson(json);
   }
 }

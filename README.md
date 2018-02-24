@@ -8,6 +8,7 @@ This allows us to reproduce the study as described in the following [paper](http
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [Jooby](https://jooby.org/) - Web Framework for Java
 * [Bing Web Search Api v7](https://azure.microsoft.com/en-us/services/cognitive-services/bing-web-search-api/) - For web searching
+* [Freemarker](https://freemarker.apache.org/) - Template engine 
 
 ## Requirements
 * Maven 

@@ -11,6 +11,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.vdtas.helpers.SessionHelper;
+import com.vdtas.models.SearchResults;
 import org.jooby.Request;
 import org.jooby.Result;
 import org.jooby.Results;
@@ -38,6 +40,8 @@ public class BingSearch {
 
   @GET
   public Result processRequest(Request request) {
+    // Increment search count
+    SessionHelper.incrementQueryCount(request.session());
 
     SearchResults result = new SearchResults();
     System.out.println("Received request");

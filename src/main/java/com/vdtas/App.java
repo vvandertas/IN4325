@@ -1,5 +1,6 @@
 package com.vdtas;
 
+import com.vdtas.models.UserSession;
 import org.jooby.Jooby;
 import org.jooby.ftl.Ftl;
 import org.jooby.livereload.LiveReload;
@@ -23,6 +24,9 @@ public class App extends Jooby {
     // set port to what Bing Search API wants to see
     port(9090);
 
+    // enable cookie sessions
+    cookieSession();
+
     // access to css and js files
     assets("/assets/css/**");
     assets("/assets/js/**");
@@ -30,6 +34,7 @@ public class App extends Jooby {
     // MVC routing
     use(ViewController.class);
     use(BingSearch.class);
+    use(UserSession.class);
   }
 
   public static void main(final String[] args) {

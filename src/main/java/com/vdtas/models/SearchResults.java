@@ -1,4 +1,4 @@
-package com.vdtas;
+package com.vdtas.models;
 
 import java.util.HashMap;
 
@@ -7,10 +7,10 @@ import java.util.HashMap;
  * @author vvandertas
  */
 public class SearchResults {
-    HashMap<String, String> relevantHeaders;
+    public HashMap<String, String> relevantHeaders;
     String jsonResponse;
 
-    SearchResults(HashMap<String, String> headers, String json) {
+    public SearchResults(HashMap<String, String> headers, String json) {
       relevantHeaders = headers;
       jsonResponse = json;
     }

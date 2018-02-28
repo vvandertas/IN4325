@@ -1,4 +1,4 @@
-package com.vdtas;
+package com.vdtas.controllers;
 
 import java.net.*;
 import java.util.*;
@@ -14,6 +14,8 @@ import org.jooby.Result;
 import org.jooby.Results;
 import org.jooby.mvc.GET;
 import org.jooby.mvc.Path;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Path("/search")
 public class BingSearch {
@@ -21,16 +23,16 @@ public class BingSearch {
   /**
    * Bing Subscription Key
    */
-  final String subscriptionKey;
+  private final String subscriptionKey;
   /**
    * Bing API host and path used for placing search requests
    */
-  static String host = "https://api.cognitive.microsoft.com";
-  static String path = "/bing/v7.0/search";
+  private static String host = "https://api.cognitive.microsoft.com";
+  private static String path = "/bing/v7.0/search";
+  private final Logger logger = LoggerFactory.getLogger(BingSearch.class);
 
   @Inject
   public BingSearch( @Named("bing.apiKey") String apiKey) {
-    System.out.println("Api key: " + apiKey);
     subscriptionKey = apiKey;
   }
 
@@ -40,7 +42,7 @@ public class BingSearch {
     SessionHelper.incrementQueryCount(request.session());
 
     SearchResults result = new SearchResults();
-    System.out.println("Received request");
+    logger.info("Received request");
 
     try {
       String query = request.param("query").value();
@@ -50,7 +52,7 @@ public class BingSearch {
       result = searchWeb(query, offset, count);
 
     } catch(Exception e) {
-      e.printStackTrace();
+      logger.error("An error occurred while processing search request", e);
     }
 
     return Results.json(result);

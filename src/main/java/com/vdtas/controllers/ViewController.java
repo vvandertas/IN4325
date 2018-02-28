@@ -1,4 +1,4 @@
-package com.vdtas;
+package com.vdtas.controllers;
 
 import com.vdtas.helpers.SessionHelper;
 import org.jooby.Request;

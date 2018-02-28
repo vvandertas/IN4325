@@ -1,5 +1,7 @@
 package com.vdtas;
 
+import com.vdtas.controllers.BingSearch;
+import com.vdtas.controllers.ViewController;
 import com.vdtas.models.UserSession;
 import org.jooby.Jooby;
 import org.jooby.ftl.Ftl;

@@ -1,6 +1,7 @@
 package com.vdtas.helpers;
 
 import com.vdtas.models.UserSession;
+import com.vdtas.models.hints.ParticipantType;
 import org.jooby.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,53 +15,58 @@ import java.util.UUID;
  */
 @Singleton
 public class SessionHelper {
-  private static final String SESSION_ID = "sessionId";
-  private static HashMap<UUID, UserSession> sessionMap = new java.util.HashMap<>();
-  private static Logger logger = LoggerFactory.getLogger(SessionHelper.class);
+    private static final String SESSION_ID = "sessionId";
+    private static HashMap<UUID, UserSession> sessionMap = new java.util.HashMap<>();
+    private static Logger logger = LoggerFactory.getLogger(SessionHelper.class);
 
-  public static void validateUserSession(Session session) {
-    // get user session id
-    UUID sessionId = checkSessionId(session);
-    if(!sessionMap.containsKey(sessionId)) {
-      logger.info("Session does not exist yet, creating one.");
-      UserSession userSession = new UserSession(sessionId);
-      sessionMap.put(sessionId, userSession);
-    }
-  }
+    public static void validateUserSession(Session session) {
+        // get user session id
+        UUID sessionId = checkSessionId(session);
+        if (!sessionMap.containsKey(sessionId)) {
+            logger.info("Session does not exist yet, creating one.");
 
-  /**
-   * Check if we already have a session id for the user. If not create one.
-   *
-   * @param session
-   * @return
-   */
-  private static UUID checkSessionId(Session session) {
-    if(!session.get(SESSION_ID).isSet()) {
-      logger.info("Session id not found. Creating one now");
-      session.set(SESSION_ID, UUID.randomUUID().toString());
-    } else {
-      logger.info("Existing session id found");
+            // Create new user session and assign a participant type.
+            ParticipantType participantType = ExperimentHelper.selectParticipantType();
+            UserSession userSession = new UserSession(sessionId, participantType);
+
+            sessionMap.put(sessionId, userSession);
+        }
     }
 
-    return UUID.fromString(session.get(SESSION_ID).value());
-  }
+    /**
+     * Check if we already have a session id for the user. If not create one.
+     *
+     * @param session
+     * @return
+     */
+    private static UUID checkSessionId(Session session) {
+        if (!session.get(SESSION_ID).isSet()) {
+            logger.info("Session id not found. Creating one now");
+            session.set(SESSION_ID, UUID.randomUUID().toString());
+        } else {
+            logger.info("Existing session id found");
+        }
 
-  /**
-   * Increment the global query count by 1 for this session
-   * @param session
-   */
-  public static void incrementQueryCount(Session session) {
-    if(!session.get(SESSION_ID).isSet()) {
-      logger.error("Session not found when performing search");
-      // TODO: Throw error or something
+        return UUID.fromString(session.get(SESSION_ID).value());
     }
 
-    logger.info("Incrementing user session query count");
-    String sessionId = session.get(SESSION_ID).value();
-    UserSession userSession = sessionMap.get(UUID.fromString(sessionId));
+    /**
+     * Increment the global query count by 1 for this session
+     *
+     * @param session
+     */
+    public static void incrementQueryCount(Session session) {
+        if (!session.get(SESSION_ID).isSet()) {
+            logger.error("Session not found when performing search");
+            // TODO: Throw error or something
+        }
 
-    logger.info("New count: " + userSession.incrementCount());
+        logger.info("Incrementing user session query count");
+        String sessionId = session.get(SESSION_ID).value();
+        UserSession userSession = sessionMap.get(UUID.fromString(sessionId));
 
-    sessionMap.put(userSession.getId(),userSession);
-  }
+        logger.info("New count: " + userSession.incrementCount());
+
+        sessionMap.put(userSession.getId(), userSession);
+    }
 }

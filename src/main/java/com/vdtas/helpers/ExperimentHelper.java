@@ -1,7 +1,7 @@
 package com.vdtas.helpers;
 
 import com.google.common.collect.ImmutableList;
-import com.vdtas.models.hints.*;
+import com.vdtas.models.participants.*;
 
 import javax.inject.Singleton;
 
@@ -11,13 +11,13 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class ExperimentHelper {
-    private static NoHint noHint = new NoHint();
-    private static GenericHint genericHint = new GenericHint();
-    private static SpecificHint specificHint = new SpecificHint();
+    private static NoHintParticipant noHint = new NoHintParticipant();
+    private static GenericHintParticipant genericHint = new GenericHintParticipant();
+    private static SpecificHintParticipant specificHint = new SpecificHintParticipant();
 
     public static synchronized ParticipantType selectParticipantType() {
-        Hint selectedHint = Hint.randomMin(ImmutableList.of(noHint, genericHint, specificHint)).increment();
-        return selectedHint.getParticipantType();
+        Participant selectedParticipant = Participant.randomMin(ImmutableList.of(noHint, genericHint, specificHint)).increment();
+        return selectedParticipant.getParticipantType();
     }
 
 

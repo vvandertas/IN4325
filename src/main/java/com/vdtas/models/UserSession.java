@@ -1,6 +1,6 @@
 package com.vdtas.models;
 
-import com.vdtas.models.hints.ParticipantType;
+import com.vdtas.models.participants.ParticipantType;
 
 import java.util.UUID;
 

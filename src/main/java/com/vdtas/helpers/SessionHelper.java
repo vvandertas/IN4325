@@ -1,7 +1,7 @@
 package com.vdtas.helpers;
 
 import com.vdtas.models.UserSession;
-import com.vdtas.models.hints.ParticipantType;
+import com.vdtas.models.participants.ParticipantType;
 import org.jooby.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

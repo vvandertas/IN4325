@@ -1,4 +1,4 @@
-package com.vdtas.models.hints;
+package com.vdtas.models.participants;
 
 /**
  * @author vvandertas

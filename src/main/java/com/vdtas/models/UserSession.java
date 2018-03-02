@@ -9,13 +9,20 @@ import java.util.UUID;
  */
 public class UserSession {
 
-    private UUID id;
+    private final UUID id;
+    private final ParticipantType participantType;
     private int queryCount = 0;
-    private ParticipantType participantType;
+
+    private Tasks remainingTasks;
+    private Task currentTask;
+    private int taskQueryCount;
+    private int taskSubmissionCount;
+
 
     public UserSession(UUID id, ParticipantType pt) {
         this.id = id;
         participantType = pt;
+        remainingTasks = new Tasks();
     }
 
     public UUID getId() {
@@ -26,8 +33,20 @@ public class UserSession {
         return queryCount;
     }
 
+    public Tasks getRemainingTasks() {
+        return remainingTasks;
+    }
+
     public ParticipantType getParticipantType() {
         return participantType;
+    }
+
+    public Task getCurrentTask() {
+        return currentTask;
+    }
+
+    public void setCurrentTask(Task currentTask) {
+        this.currentTask = currentTask;
     }
 
     /**

@@ -1,7 +1,7 @@
 package com.vdtas;
 
 import com.vdtas.controllers.BingSearch;
-import com.vdtas.controllers.ViewController;
+import com.vdtas.controllers.ExperimentController;
 import com.vdtas.models.UserSession;
 import org.jooby.Jooby;
 import org.jooby.ftl.Ftl;
@@ -13,34 +13,36 @@ import org.jooby.json.Gzon;
  */
 public class App extends Jooby {
 
-  {
-    // template engine
-    use(new Ftl());
+    {
+        // template engine
+        use(new Ftl());
 
-    // live reload
-    use(new LiveReload());
+        // live reload
+        use(new LiveReload());
 
-   // Jooby gson
-    use(new Gzon());
+        // Jooby gson
+        use(new Gzon());
 
-    // set port to what Bing Search API wants to see
-    port(9090);
+        // set port to what Bing Search API wants to see
+        port(9090);
 
-    // enable cookie sessions
-    cookieSession();
+        // enable cookie sessions
+        cookieSession();
 
-    // access to css and js files
-    assets("/assets/css/**");
-    assets("/assets/js/**");
+        // access to css and js files
+        assets("/assets/css/**");
+        assets("/assets/js/**");
 
-    // MVC routing
-    use(ViewController.class);
-    use(BingSearch.class);
-    use(UserSession.class);
-  }
+        // MVC routing
+        use(ExperimentController.class);
+        use(BingSearch.class);
+        use(UserSession.class);
 
-  public static void main(final String[] args) {
-    run(App::new, args);
-  }
+        //TODO: Add selenium test
 
+    }
+
+    public static void main(final String[] args) {
+        run(App::new, args);
+    }
 }

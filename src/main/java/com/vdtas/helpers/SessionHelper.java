@@ -19,12 +19,17 @@ import java.util.UUID;
 @Singleton
 public class SessionHelper {
     private static final String SESSION_ID = "sessionId";
-    private static HashMap<UUID, UserSession> sessionMap = new java.util.HashMap<>();
+    protected static HashMap<UUID, UserSession> sessionMap = new java.util.HashMap<>();
     private static Logger logger = LoggerFactory.getLogger(SessionHelper.class);
 
-    public static void findOrCreateUserSession(Session session) {
+    /**
+     * Get the users sessionId and find or create its UserSession.
+     *
+     * @param session
+     */
+    public static UserSession findOrCreateUserSession(Session session) {
         // get user session id
-        UUID sessionId = checkSessionId(session);
+        UUID sessionId = findOrCreateSessionId(session);
 
         // Create a UserSession if it doesn't exist yet.
         if (!sessionMap.containsKey(sessionId)) {
@@ -39,6 +44,8 @@ public class SessionHelper {
 
             sessionMap.put(sessionId, userSession);
         }
+
+        return sessionMap.get(sessionId);
     }
 
     /**
@@ -47,7 +54,7 @@ public class SessionHelper {
      * @param session
      * @return
      */
-    private static UUID checkSessionId(Session session) {
+    private static UUID findOrCreateSessionId(Session session) {
         if (!session.get(SESSION_ID).isSet()) {
             logger.info("Session id not found. Creating one now");
             session.set(SESSION_ID, UUID.randomUUID().toString());
@@ -70,17 +77,13 @@ public class SessionHelper {
         sessionMap.put(userSession.getId(), userSession);
     }
 
-    public static ParticipantType findParticipantType(Session session) throws SessionException {
-        UserSession userSession = findUserSession(session);
-        return userSession.getParticipantType();
-    }
-
-    public static Task findCurrentTask(Session session) throws SessionException {
-        UserSession userSession = findUserSession(session);
-        return userSession.getCurrentTask();
-    }
-
-    public static UserSession findUserSession(Session session) throws SessionException{
+    /**
+     * Find a user session from a Jooby session
+     * @param session
+     * @return
+     * @throws SessionException
+     */
+    protected static UserSession findUserSession(Session session) throws SessionException{
         if (!session.get(SESSION_ID).isSet()) {
             throw new SessionException("Missing session id");
         }
@@ -94,6 +97,16 @@ public class SessionHelper {
         }
     }
 
+    /**
+     * Based on the remaining tasks for a user session, randomly select the next task
+     * and update the current task for this user session.
+     *
+     * The task returned is null if the user has completed all tasks in the experiment
+     *
+     * @param session
+     * @return
+     * @throws SessionException
+     */
     public static Task updateUserTask(Session session) throws SessionException {
         UserSession userSession = findUserSession(session);
 
@@ -106,6 +119,13 @@ public class SessionHelper {
         return task;
     }
 
+    /**
+     * Retrieve the correct hint from the current task for a user session.
+     *
+     * @param session
+     * @return
+     * @throws SessionException
+     */
     public static String findCurrentHint(Session session) throws SessionException {
         UserSession userSession = findUserSession(session);
 

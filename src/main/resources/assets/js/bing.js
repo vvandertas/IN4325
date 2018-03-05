@@ -1,7 +1,7 @@
 $('document').ready(function () {
 
     // Handler for search submit
-    $("form").submit(function(e) {
+    $("#searchForm").submit(function(e) {
         e.preventDefault();
         search()
     });

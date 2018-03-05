@@ -1,8 +1,10 @@
 package com.vdtas.helpers;
 
 import com.vdtas.SessionException;
+import com.vdtas.models.Task;
 import com.vdtas.models.UserSession;
 import com.vdtas.models.participants.ParticipantType;
+import org.apache.commons.lang3.StringUtils;
 import org.jooby.Session;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,47 +51,33 @@ public class SessionHelperTest {
      */
     @Test(expected = SessionException.class)
     public void findUserSession_missingUserSession() throws Exception {
-        String id = UUID.randomUUID().toString();
-        when(mockedSession.get("sessionId").isSet()).thenReturn(true);
-        when(mockedSession.get("sessionId").value()).thenReturn(id);
+        mockSessionId(true);
 
         SessionHelper.findUserSession(mockedSession);
     }
 
     /**
-     * Validate that an existing UserSession can be found.
+     * Validate that findOrCreateUserSession returns a new UserSession in case it is not yet present.
      *
      * @throws Exception
      */
     @Test
-    public void findUserSession() throws Exception {
-        UUID id = UUID.randomUUID();
-        UserSession expectedSession = new UserSession(id, ParticipantType.GENERIC_HINT);
-
-        when(mockedSession.get("sessionId").isSet()).thenReturn(true);
-        when(mockedSession.get("sessionId").value()).thenReturn(id.toString());
-
-        sessionMap.put(id, expectedSession);
-
-        assertEquals(expectedSession, SessionHelper.findUserSession(mockedSession));
-    }
-
-    @Test
     public void findOrCreateUserSession_noSessionInMap() throws Exception {
-        UUID newId = UUID.randomUUID();
-        when(mockedSession.get("sessionId").isSet()).thenReturn(false);
-        when(mockedSession.get("sessionId").value()).thenReturn(newId.toString());
+        mockSessionId(false);
 
         UserSession userSession = findOrCreateUserSession(mockedSession);
         assertNotNull(userSession);
         assertTrue(SessionHelper.sessionMap.containsKey(userSession.getId()));
     }
 
+    /**
+     * Validate that an existing UserSession can be found
+     *
+     * @throws Exception
+     */
     @Test
     public void findOrCreateUserSession_existingUserSession() throws Exception {
-        UUID existingId = UUID.randomUUID();
-        when(mockedSession.get("sessionId").isSet()).thenReturn(true);
-        when(mockedSession.get("sessionId").value()).thenReturn(existingId.toString());
+        UUID existingId = mockSessionId(true);
 
         UserSession userSession = new UserSession(existingId, ParticipantType.GENERIC_HINT);
         sessionMap.put(existingId, userSession);
@@ -98,5 +86,77 @@ public class SessionHelperTest {
         assertNotNull(foundSession);
         assertEquals(userSession, foundSession);
         assertEquals("There should only be one user session in the map", 1, sessionMap.size());
+    }
+
+    /**
+     * Test hint retrieval without active task for user.
+     * This should not cause an error but simple return an empty string
+     *
+     * @throws Exception
+     */
+    @Test
+    public void findHint_noCurrentTask() throws Exception {
+        UUID id = mockSessionId(true);
+
+        // make sure a user session exists
+        UserSession userSession = new UserSession(id, ParticipantType.GENERIC_HINT);
+        sessionMap.put(id, userSession);
+
+        String currentHint = SessionHelper.findCurrentHint(mockedSession);
+        assertTrue(StringUtils.isEmpty(currentHint));
+    }
+
+    /**
+     * Test hint retrieval for all participant types.
+     *
+     * @throws Exception
+     */
+    @Test
+    public void findHint_withCurrentTask() throws Exception {
+        // Create a task for the userSession
+        Task task = new Task(1, "testName", "This is a test question");
+        String specificHint = "Specific Hint";
+        task.setSpecificHint(specificHint);
+
+        // make sure a user session exists
+        UUID id = mockSessionId(true);
+
+        UserSession userSession = new UserSession(id, ParticipantType.GENERIC_HINT);
+        userSession.setCurrentTask(task);
+        sessionMap.put(id, userSession);
+
+        // User is of type generic hint
+        String hint = SessionHelper.findCurrentHint(mockedSession);
+        assertEquals("Expecting generic hint", Task.GENERIC_HINT, hint);
+
+        // Update user to specific hint
+        userSession = new UserSession(id, ParticipantType.SPECIFIC_HINT);
+        userSession.setCurrentTask(task);
+        sessionMap.put(id, userSession);
+
+        hint = SessionHelper.findCurrentHint(mockedSession);
+        assertEquals("Expecting specific hint", specificHint, hint);
+
+        // Update user to no hint
+        userSession = new UserSession(id, ParticipantType.NO_HINT);
+        userSession.setCurrentTask(task);
+        sessionMap.put(id, userSession);
+
+        hint = SessionHelper.findCurrentHint(mockedSession);
+        assertEquals("Expecting no hint", "", hint);
+    }
+
+    /**
+     * Helper to mock the retrieval of the sessionId from a Session.
+     *
+     * @param isSet indicates if we want to let isSet return true or false
+     * @return
+     */
+    private UUID mockSessionId(boolean isSet) {
+        UUID id = UUID.randomUUID();
+        when(mockedSession.get("sessionId").isSet()).thenReturn(isSet);
+        when(mockedSession.get("sessionId").value()).thenReturn(id.toString());
+
+        return id;
     }
 }

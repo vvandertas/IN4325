@@ -2,6 +2,8 @@ package com.vdtas.models;
 
 import com.vdtas.models.participants.ParticipantType;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -15,14 +17,14 @@ public class UserSession {
 
     private Tasks remainingTasks;
     private Task currentTask;
-    private int taskQueryCount;
-    private int taskSubmissionCount;
+    private HashMap<String, Integer> taskCounts;
 
 
     public UserSession(UUID id, ParticipantType pt) {
         this.id = id;
         participantType = pt;
         remainingTasks = new Tasks();
+        taskCounts = new HashMap<>();
     }
 
     public UUID getId() {
@@ -55,5 +57,30 @@ public class UserSession {
      */
     public int incrementCount() {
         return ++queryCount;
+    }
+
+    /**
+     * Increment the query count for the current task
+     *
+     * @return incremented count or -1 if there is no current task
+     */
+    public int incrementQueryCount() {
+        if(currentTask == null) {
+            return -1;
+        }
+        return taskCounts.merge(currentTask.getId() +":queryCount", 1, Integer::sum);
+    }
+
+    /**
+     * Increment the submission count for the current task
+     *
+     * @return incremented count or -1 if currentTask is null
+     */
+    public int incrementSubmisionCount() {
+        if(currentTask == null) {
+            return  -1;
+        }
+
+        return taskCounts.merge(currentTask.getId() +":submissionCount", 1, Integer::sum);
     }
 }

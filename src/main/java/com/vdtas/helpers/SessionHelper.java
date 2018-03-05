@@ -73,7 +73,8 @@ public class SessionHelper {
     public static void incrementQueryCount(Session session) throws SessionException {
         UserSession userSession = findUserSession(session);
 
-        userSession.incrementCount();
+        int queryCount = userSession.incrementQueryCount();
+        logger.info("Incremented query count for : " + queryCount);
         sessionMap.put(userSession.getId(), userSession);
     }
 

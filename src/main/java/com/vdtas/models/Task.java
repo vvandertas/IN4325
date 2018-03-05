@@ -4,22 +4,31 @@ package com.vdtas.models;
  * @author vvandertas
  */
 public class Task {
-    int id;
+    public static final String GENERIC_HINT = "The generic hint we show for all tasks";
+
+    private final String genericHint;
+    private final int id;
     private String name;
     private String question;
     private String specificHint;
-    private String genericHint;
 
-    public Task(String name, String question) {
+    public Task(int id, String name, String question) {
+        this.id = id;
         this.name = name;
         this.question = question;
+        this.genericHint = "The generic hint we show for all tasks";
     }
 
-    public Task(String name, String question, String specificHint, String genericHint) {
+    public Task(int id, String name, String question, String specificHint) {
+        this.id = id;
         this.name = name;
         this.question = question;
         this.specificHint = specificHint;
-        this.genericHint = genericHint;
+        this.genericHint = "The generic hint we show for all tasks";
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {
@@ -48,9 +57,5 @@ public class Task {
 
     public String getGenericHint() {
         return genericHint;
-    }
-
-    public void setGenericHint(String genericHint) {
-        this.genericHint = genericHint;
     }
 }

@@ -40,7 +40,7 @@ public class SessionHelper {
             UserSession userSession = new UserSession(sessionId, participantType);
 
             // Select first task for user
-            userSession.setCurrentTask(userSession.getRemainingTasks().randomNext());
+            userSession.setCurrentTask(userSession.getRemainingTasks().next());
 
             sessionMap.put(sessionId, userSession);
         }
@@ -111,7 +111,7 @@ public class SessionHelper {
         UserSession userSession = findUserSession(session);
 
         Tasks remainingTasks = userSession.getRemainingTasks();
-        Task task = remainingTasks.randomNext();
+        Task task = remainingTasks.next();
         userSession.setCurrentTask(task);
 
         sessionMap.put(userSession.getId(), userSession);

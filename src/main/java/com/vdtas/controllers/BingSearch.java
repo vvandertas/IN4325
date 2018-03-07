@@ -7,9 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.net.ssl.HttpsURLConnection;
 
-import com.vdtas.SessionException;
 import com.vdtas.helpers.ExperimentHelper;
-import com.vdtas.helpers.SessionHelper;
 import com.vdtas.models.SearchResults;
 import com.vdtas.models.User;
 import org.jooby.Request;

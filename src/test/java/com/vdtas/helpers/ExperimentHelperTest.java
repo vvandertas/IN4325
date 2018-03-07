@@ -2,10 +2,10 @@ package com.vdtas.helpers;
 
 import com.google.common.collect.ImmutableList;
 import com.vdtas.daos.HintDao;
+import com.vdtas.daos.UserDao;
 import com.vdtas.daos.UserTaskDataDao;
 import com.vdtas.models.*;
 import com.vdtas.models.participants.ParticipantType;
-import org.apache.commons.lang3.StringUtils;
 import org.jooby.Session;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,26 +38,7 @@ public class ExperimentHelperTest {
         mockedSession = mock(Session.class, Mockito.RETURNS_DEEP_STUBS);
     }
 
-//    /**
-//     * Test hint retrieval without active task for user.
-//     * This should not cause an error but simple return an empty string
-//     *
-//     * @throws Exception
-//     */
-//    @Test
-//    public void findHint_noCurrentTask() throws Exception {
-//        UUID id = mockSessionId(true);
-//
-//        // make sure a user session exists
-//        User user = new User();
-//        user.setParticipantType(ParticipantType.GENERIC_HINT);
-//        user.setId(id);
-//
-//        when(experimentHelper.hintDao.findByTaskId(-1)).thenReturn(user);
-//
-//        String currentHint = SessionHelper.findCurrentHint(mockedSession);
-//        assertTrue(StringUtils.isEmpty(currentHint));
-//    }
+
     /**
      * Test hint retrieval for all participant types.
      *
@@ -74,7 +55,7 @@ public class ExperimentHelperTest {
         when(mockedHintDao.findByTaskId(1)).thenReturn(ImmutableList.of(hint1, hint2));
 
         // make sure a user session exists
-        UUID id = mockSessionId(true);
+        UUID id = mockUserId(true);
 
         User user = new User(id, ParticipantType.SPECIFIC_HINT);
         user.setCurrentTaskId(task.getId());
@@ -105,10 +86,10 @@ public class ExperimentHelperTest {
      * @param isSet indicates if we want to let isSet return true or false
      * @return
      */
-    private UUID mockSessionId(boolean isSet) {
+    private UUID mockUserId(boolean isSet) {
         UUID id = UUID.randomUUID();
-        when(mockedSession.get("sessionId").isSet()).thenReturn(isSet);
-        when(mockedSession.get("sessionId").value()).thenReturn(id.toString());
+        when(mockedSession.get("userId").isSet()).thenReturn(isSet);
+        when(mockedSession.get("userId").value()).thenReturn(id.toString());
 
         return id;
     }

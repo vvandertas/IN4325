@@ -33,7 +33,7 @@ public interface UserDao {
      */
     @SqlQuery("SELECT * FROM users where id=:id;")
     @RegisterBeanMapper(User.class)
-    User findById(@Bind UUID id);
+    User findById(@Bind("id") UUID id);
 
 
     /**
@@ -45,6 +45,6 @@ public interface UserDao {
     @RegisterBeanMapper(User.class)
     List<User> listUsers();
 
-    @SqlUpdate("UPDATE users SET task_id=:taskId WHERE user_id=:userId;")
+    @SqlUpdate("UPDATE users SET task_id=:taskId WHERE id=:userId;")
     void updateTaskId(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
 }

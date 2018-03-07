@@ -49,4 +49,9 @@ public class TaskHelper {
 
         return nextTask;
     }
+
+    public void insertTasks() {
+        taskDao.insert(new Task("This is a test task", "test 1"));
+        taskDao.insert(new Task("This is another test task", "test 2"));
+    }
 }

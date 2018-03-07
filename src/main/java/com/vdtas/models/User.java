@@ -43,4 +43,13 @@ public class User {
     public void setCurrentTaskId(int currentTaskId) {
         this.currentTaskId = currentTaskId;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", participantType=" + participantType +
+                ", currentTaskId=" + currentTaskId +
+                '}';
+    }
 }

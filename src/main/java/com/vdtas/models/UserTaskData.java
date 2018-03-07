@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 public class UserTaskData {
 
-    private UUID sessionId;
+    private UUID userId;
     private int taskId;
 
     private int queryCount =0;
@@ -22,17 +22,17 @@ public class UserTaskData {
     public UserTaskData() {
     }
 
-    public UserTaskData(UUID sessionId, int taskId) {
-        this.sessionId = sessionId;
+    public UserTaskData(UUID userId, int taskId) {
+        this.userId = userId;
         this.taskId = taskId;
     }
 
-    public UUID getSessionId() {
-        return sessionId;
+    public UUID getUserId() {
+        return userId;
     }
 
-    public void setSessionId(UUID sessionId) {
-        this.sessionId = sessionId;
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 
     public int getTaskId() {

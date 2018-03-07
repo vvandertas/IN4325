@@ -28,7 +28,7 @@ public interface TaskDao {
      * @param task Task to insert.
      * @return Primary key.
      */
-    @SqlUpdate("INSERT INTO tasks(question, name, hint) VALUES(:question,:name,:hint)")
+    @SqlUpdate("INSERT INTO tasks(question, name) VALUES(:question,:name) ON CONFLICT DO NOTHING")
     @GetGeneratedKeys
     int insert(@BindBean Task task);
 

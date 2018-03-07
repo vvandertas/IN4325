@@ -13,6 +13,11 @@ public class Task {
     public Task() {
     }
 
+    public Task(String question, String name) {
+        this.question = question;
+        this.name = name;
+    }
+
     public Task(int id, String question, String name) {
         this.id = id;
         this.question = question;

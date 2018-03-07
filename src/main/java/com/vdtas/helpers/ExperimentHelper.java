@@ -1,7 +1,6 @@
 package com.vdtas.helpers;
 
 import com.google.common.collect.ImmutableList;
-import com.vdtas.SessionException;
 import com.vdtas.daos.HintDao;
 import com.vdtas.daos.UserTaskDataDao;
 import com.vdtas.models.Hint;
@@ -13,11 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.vdtas.models.Task.GENERIC_HINT;
 
@@ -25,7 +21,6 @@ import static com.vdtas.models.Task.GENERIC_HINT;
 /**
  * @author vvandertas
  */
-@Singleton
 public class ExperimentHelper {
     private static final Logger logger = LoggerFactory.getLogger(ExperimentHelper.class);
 
@@ -33,7 +28,6 @@ public class ExperimentHelper {
     private static GenericHintParticipant genericHint = new GenericHintParticipant();
     private static SpecificHintParticipant specificHint = new SpecificHintParticipant();
 
-    // TODO: Split this up!!
 
     private UserTaskDataDao dataDao;
     protected HintDao hintDao;
@@ -56,14 +50,14 @@ public class ExperimentHelper {
      * @param user
      */
     public void incrementQueryCount(User user) {
-        logger.debug("Incrementing query count for user: {}, task {}", user.getId().toString(), user.getCurrentTaskId());
+        logger.debug("Incrementing query count for user: {}, task {}", user.getId(), user.getCurrentTaskId());
         UserTaskData taskData = dataDao.findByUserAndTask(user.getId(), user.getCurrentTaskId());
         if(user.getCurrentTaskId() > 0) {
             if(taskData == null) {
                 dataDao.insert(new UserTaskData(user.getId(), user.getCurrentTaskId()));
-            } else {
-                dataDao.incrementQueryCount(user.getId(), user.getCurrentTaskId());
             }
+
+            dataDao.incrementQueryCount(user.getId(), user.getCurrentTaskId());
         }
     }
 

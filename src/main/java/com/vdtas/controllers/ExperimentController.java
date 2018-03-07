@@ -47,6 +47,8 @@ public class ExperimentController {
      */
     @GET
     public Result index(Request request) {
+        // TODO: Insert the tasks using flyway instead when we know what should be in them.
+        taskHelper.insertTasks();
         // Make sure a userSession exists
         sessionHelper.findOrCreateUser(request.session());
         return Results.html("bing");

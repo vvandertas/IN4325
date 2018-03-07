@@ -15,6 +15,8 @@ import org.jooby.jdbi.Jdbi3;
 import org.jooby.jdbi.TransactionalRequest;
 import org.jooby.livereload.LiveReload;
 import org.jooby.json.Gzon;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
@@ -22,6 +24,7 @@ import java.util.UUID;
  * @author vvandertas
  */
 public class App extends Jooby {
+    private final Logger logger = LoggerFactory.getLogger(App.class);
 
     {
         // template engine
@@ -51,13 +54,16 @@ public class App extends Jooby {
         );
 
         before((req, rsp) -> {
-            // your code goes here
             if (!req.path().equals("/")) {
+                logger.debug("Not in path /, so finding user");
                 if (req.session().isSet("userId")) {
                     UserDao userDao = req.require(UserDao.class);
 
                     User user = userDao.findById(UUID.fromString(req.session().get("userId").value()));
+                    logger.debug("Found user: " + user.toString());
                     req.set("user", user);
+                } else {
+                    logger.debug("userId was not set on session.");
                 }
             }
         });

@@ -4,18 +4,18 @@ package com.vdtas.models;
  * @author vvandertas
  */
 public class TaskResponse {
-    private final int taskIndex;
+    private final int taskId;
     private final String url;
     private final String text;
 
     public TaskResponse(int taskIndex, String url, String text) {
-        this.taskIndex = taskIndex;
+        this.taskId = taskIndex;
         this.url = url;
         this.text = text;
     }
 
     public int getTaskIndex() {
-        return taskIndex;
+        return taskId;
     }
 
     public String getUrl() {

@@ -8,8 +8,10 @@ import javax.inject.Named;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.vdtas.SessionException;
+import com.vdtas.helpers.ExperimentHelper;
 import com.vdtas.helpers.SessionHelper;
 import com.vdtas.models.SearchResults;
+import com.vdtas.models.User;
 import org.jooby.Request;
 import org.jooby.Result;
 import org.jooby.Results;
@@ -31,20 +33,20 @@ public class BingSearch {
     private static String host = "https://api.cognitive.microsoft.com";
     private static String path = "/bing/v7.0/search";
     private final Logger logger = LoggerFactory.getLogger(BingSearch.class);
+    private ExperimentHelper experimentHelper;
 
     @Inject
-    public BingSearch(@Named("bing.apiKey") String apiKey) {
+    public BingSearch(@Named("bing.apiKey") String apiKey, ExperimentHelper experimentHelper) {
         subscriptionKey = apiKey;
+        this.experimentHelper = experimentHelper;
     }
 
     @GET
     public Result processRequest(Request request) {
+        User user = request.get("user");
+
         // Increment search count
-        try {
-            SessionHelper.incrementQueryCount(request.session());
-        } catch (SessionException se) {
-            logger.error("Unable to increment query count.", se);
-        }
+        experimentHelper.incrementQueryCount(user);
 
         SearchResults result = new SearchResults();
         logger.info("Received request");

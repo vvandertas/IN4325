@@ -1,7 +1,12 @@
 package com.vdtas.models;
 
 import com.vdtas.models.participants.ParticipantType;
+import org.jdbi.v3.core.mapper.RowMapper;
+import org.jdbi.v3.core.statement.StatementContext;
+import org.jdbi.v3.sqlobject.customizer.BindBean;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -11,9 +16,11 @@ import java.util.UUID;
  */
 public class UserSession {
 
+    // TODO: Setup a PG db to make sessions persistent and store: Task counts and submissions, answerFound, urls clicked
+    // TODO: Also store created_on and finished_on to determine duration
+
     private final UUID id;
     private final ParticipantType participantType;
-    private int queryCount = 0;
 
     private Tasks remainingTasks;
     private Task currentTask;
@@ -31,10 +38,6 @@ public class UserSession {
         return id;
     }
 
-    public int getQueryCount() {
-        return queryCount;
-    }
-
     public Tasks getRemainingTasks() {
         return remainingTasks;
     }
@@ -49,14 +52,6 @@ public class UserSession {
 
     public void setCurrentTask(Task currentTask) {
         this.currentTask = currentTask;
-    }
-
-    /**
-     * Increment and return the query count
-     * @return
-     */
-    public int incrementCount() {
-        return ++queryCount;
     }
 
     /**

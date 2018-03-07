@@ -6,37 +6,26 @@ package com.vdtas.models;
 public class Task {
     public static final String GENERIC_HINT = "The generic hint we show for all tasks";
 
-    private final String genericHint;
-    private final int id;
-    private String name;
+    private int id;
     private String question;
-    private String specificHint;
+    private String name;
 
-    public Task(int id, String name, String question) {
-        this.id = id;
-        this.name = name;
-        this.question = question;
-        this.genericHint = "The generic hint we show for all tasks";
+    public Task() {
     }
 
-    public Task(int id, String name, String question, String specificHint) {
+    public Task(int id, String question, String name) {
         this.id = id;
-        this.name = name;
         this.question = question;
-        this.specificHint = specificHint;
-        this.genericHint = "The generic hint we show for all tasks";
+        this.name = name;
     }
+
 
     public int getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getQuestion() {
@@ -47,15 +36,11 @@ public class Task {
         this.question = question;
     }
 
-    public String getSpecificHint() {
-        return specificHint;
+    public String getName() {
+        return name;
     }
 
-    public void setSpecificHint(String specificHint) {
-        this.specificHint = specificHint;
-    }
-
-    public String getGenericHint() {
-        return genericHint;
+    public void setName(String name) {
+        this.name = name;
     }
 }

@@ -12,8 +12,8 @@ import java.util.List;
 public class Tasks {
     // List of all tasks used in the experiment
     private static final List<Task> tasks = new ArrayList<Task>() {{
-        new Task(1, "NAME", "My awesome question");
-        new Task(2, "NAME2", "My awesome question 2");
+        new Task(1, "Question 1", "NAME");
+        new Task(2,"Question 2", "NAME2");
     }};
 
     private final Logger logger = LoggerFactory.getLogger(Tasks.class);

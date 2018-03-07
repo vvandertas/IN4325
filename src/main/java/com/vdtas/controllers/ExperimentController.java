@@ -1,23 +1,24 @@
 package com.vdtas.controllers;
 
 import com.google.gson.Gson;
-import com.vdtas.SessionException;
+import com.vdtas.helpers.ExperimentHelper;
 import com.vdtas.helpers.SessionHelper;
-import com.vdtas.models.TaskResponse;
-import com.vdtas.models.Task;
-import com.vdtas.models.Tasks;
+import com.vdtas.helpers.TaskHelper;
+import com.vdtas.models.*;
 import org.jooby.Request;
 import org.jooby.Result;
 import org.jooby.Results;
-import org.jooby.Session;
 import org.jooby.mvc.GET;
 import org.jooby.mvc.POST;
 import org.jooby.mvc.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -28,7 +29,16 @@ public class ExperimentController {
 
     private final Logger logger = LoggerFactory.getLogger(ExperimentController.class);
 
-    // TODO: Make sure experiment stops after last task is skipped or answered correctly
+    private ExperimentHelper experimentHelper;
+    private TaskHelper taskHelper;
+    private SessionHelper sessionHelper;
+
+    @Inject
+    public ExperimentController(ExperimentHelper experimentHelper, TaskHelper taskHelper, SessionHelper sessionHelper) {
+        this.experimentHelper = experimentHelper;
+        this.taskHelper = taskHelper;
+        this.sessionHelper = sessionHelper;
+    }
 
     /**
      * Show the landing page
@@ -38,8 +48,7 @@ public class ExperimentController {
     @GET
     public Result index(Request request) {
         // Make sure a userSession exists
-        SessionHelper.findOrCreateUserSession(request.session());
-
+        sessionHelper.findOrCreateUser(request.session());
         return Results.html("bing");
     }
 
@@ -51,26 +60,21 @@ public class ExperimentController {
     @GET
     @Path("/next")
     public Result nextTask(Request request) {
-        Session session = request.session();
-        Task task = null;
-        String hint = "";
-        try {
-            // then move to next task, if available
-            task = SessionHelper.updateUserTask(session);
-            hint = SessionHelper.findCurrentHint(session);
-        } catch (SessionException e) {
-            logger.error("Unable to retrieve next task and hint", e);
-        }
-
+        User user = request.get("user");
+        // then move to next task, if available
+        Task task = taskHelper.getNextTask(user);
 
         // This user is done with the experiment
         if(task == null) {
-            // Redirect to home page TODO: Something else?
-            Results.redirect("/");
-        } else {
-            // TODO: Use task question and hint in UI
+            // TODO: Redirect to questionnaire instead
+            return Results.redirect("/");
         }
 
+        // Find all hints for the current task.
+        List<Hint> hints = experimentHelper.findCurrentHints(user, task);
+        List<String> textHints = hints.stream().map(Hint::getHint).collect(Collectors.toList());
+        
+        // TODO: Use task question and hint in UI
         return Results.ok();
     }
 

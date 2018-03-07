@@ -41,7 +41,6 @@ $('document').ready(function () {
             dataType: 'json',
             success: function (data) {
                 console.log("Nexting");
-                // use the handleOnLoad method to display the search results
 
                 // Show no results yet.
                 $("#mainline, #paging1, #paging2").hide();

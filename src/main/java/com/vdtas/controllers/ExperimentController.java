@@ -41,6 +41,8 @@ public class ExperimentController {
         this.sessionHelper = sessionHelper;
     }
 
+    // TODO: Make sure we always have task data, even though user skipped without querying.
+
     /**
      * Show the landing page
      * @param request

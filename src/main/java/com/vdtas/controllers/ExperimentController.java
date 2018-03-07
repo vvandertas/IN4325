@@ -1,5 +1,6 @@
 package com.vdtas.controllers;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.Gson;
 import com.vdtas.helpers.ExperimentHelper;
 import com.vdtas.helpers.SessionHelper;
@@ -75,9 +76,10 @@ public class ExperimentController {
         // Find all hints for the current task.
         List<Hint> hints = experimentHelper.findCurrentHints(user, task);
         List<String> textHints = hints.stream().map(Hint::getHint).collect(Collectors.toList());
-        
-        // TODO: Use task question and hint in UI
-        return Results.ok();
+
+        Map<String, Object> results = ImmutableMap.of("task", task, "hints", hints);
+
+        return Results.json(new Gson().toJson(results));
     }
 
     @POST

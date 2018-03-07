@@ -2,6 +2,7 @@ package com.vdtas.daos;
 
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import com.vdtas.models.Task;
+import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
@@ -20,7 +21,7 @@ public interface TaskDao {
      */
     @SqlQuery("SELECT * FROM tasks WHERE id=:id")
     @RegisterBeanMapper(Task.class)
-    Task findById(int id);
+    Task findById(@Bind("id") int id);
 
     /**
      * Insert a task and returns the generated PK.

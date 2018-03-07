@@ -45,6 +45,6 @@ public interface UserDao {
     @RegisterBeanMapper(User.class)
     List<User> listUsers();
 
-    @SqlUpdate("UPDATE users SET task_id=:taskId WHERE id=:userId;")
+    @SqlUpdate("UPDATE users SET current_task_id=:taskId WHERE id=:userId;")
     void updateTaskId(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
 }

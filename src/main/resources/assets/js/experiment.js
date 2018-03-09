@@ -25,7 +25,6 @@ $('document').ready(function () {
         });
     }
 
-
     $("#skip").on("click", function (e) {
         e.preventDefault();
 
@@ -40,18 +39,44 @@ $('document').ready(function () {
             contentType: 'application/json',
             dataType: 'json',
             success: function (data) {
-                console.log("Nexting");
+                console.log("data: ", data);
+                var parsedData = JSON.parse(data);
 
-                // Show no results yet.
-                $("#mainline, #paging1, #paging2").hide();
-                $("#noresults").show();
+                if(parsedData.hasNext) {
+                    // Show no results yet.
+                    $("#mainline, #paging1, #paging2").hide();
+                    $("#noresults").show();
 
+                    $("#question").html(parsedData.task.question);
+                    var hints = parsedData.hints;
+                    switch(hints.length) {
+                        case 0:
+                            $("#hints").hide();
+                            break;
+                        case 1:
+                            $("#hints").show();
+                            $("#hints").html(hints[0].hint);
+                            break;
+                        default:
+                            $("#hints").show();
+                            var html = "<ul>";
+                            hints.each(function(i) {
+                                html += "<li>" + hints[i].hint + "</li>";
+                            });
+
+                            html += "</ul>";
+
+                            $("#hints").html(html);
+                            break;
+                    }
+                } else {
+                    // TODO: Error or go to questionnaire
+                    console.log("NO NEXT")
+                }
             },
             error: function (errorData) {
                 alert("error: " + JSON.stringify(errorData));
             }
         });
     }
-
-
 });

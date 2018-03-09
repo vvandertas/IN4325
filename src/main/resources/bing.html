@@ -140,16 +140,26 @@
     <div id="experiment" class="col-md-4 container">
         <form id="experimentForm" enctype="application/x-www-form-urlencoded" action="/validate" method="post">
             <div class="form-group row">
-                <p id="question"></p>
-                <p id="hint"></p>
+                <label for="question" class="col-sm-2 col-form-label">Question</label>
+                <div class="col-sm-10">
+                    <p id="question"></p>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="hints" class="col-sm-2 col-form-label">Hint</label>
+                <div class="col-sm-10">
+                    <p id="hints"></p>
+                </div>
+            </div>
 
-                <label for="answer" class="col-sm-2 col-form-label">Answer:</label>
+            <div class="form-group row">
+                <label for="answer" class="col-sm-2 col-form-label">Answer</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="answer">
                 </div>
             </div>
             <div class="form-group row">
-                <label for="url" class="col-sm-2 col-form-label">URL:</label>
+                <label for="url" class="col-sm-2 col-form-label">URL</label>
                 <div class="col-sm-10">
                     <input type="text" class="form-control" id="url" name="url">
                 </div>

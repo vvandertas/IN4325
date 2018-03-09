@@ -45,10 +45,7 @@ $('document').ready(function () {
             contentType: 'application/json',
             dataType: 'json',
             success: function (data) {
-                console.log("")
-                // use the handleOnLoad method to display the search results
-                showResults(data);
-
+                showResults(data); // display search results
             },
             error: function (errorData) {
                 alert("error: " + JSON.stringify(errorData));

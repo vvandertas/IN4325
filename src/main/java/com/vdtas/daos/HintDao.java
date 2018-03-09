@@ -35,7 +35,7 @@ public interface HintDao {
      */
     @SqlQuery("SELECT * FROM hints WHERE id=:id")
     @RegisterBeanMapper(Hint.class)
-    Hint findById(@Bind int id);
+    Hint findById(@Bind("id") int id);
 
 
     /**
@@ -45,7 +45,7 @@ public interface HintDao {
      */
     @SqlQuery("SELECT * FROM hints WHERE task_id=:taskId ORDER BY id ASC")
     @RegisterBeanMapper(Hint.class)
-    List<Hint> findByTaskId(@Bind int taskId);
+    List<Hint> findByTaskId(@Bind("taskId") int taskId);
 
 
 }

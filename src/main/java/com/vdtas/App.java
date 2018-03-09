@@ -5,7 +5,6 @@ import com.vdtas.controllers.ExperimentController;
 import com.vdtas.daos.*;
 import com.vdtas.helpers.PostgresSessionStore;
 import com.vdtas.models.User;
-import com.vdtas.models.UserSession;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jooby.Jooby;
 import org.jooby.flyway.Flywaydb;

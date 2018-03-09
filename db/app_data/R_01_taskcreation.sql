@@ -1,0 +1,2 @@
+INSERT INTO tasks(name, question) VALUES('Task 1', 'This is a temporary question'), ('Task 2', 'This is another placeholder question');
+INSERT INTO hints(task_id, hint) VALUES(1, 'This is a very special first placeholder hint'), (1, 'Together with another placeholder hint for this task'),(2,'A lonesome placeholder hint for this task');

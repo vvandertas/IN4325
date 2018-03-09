@@ -50,9 +50,17 @@ public class ExperimentController {
      */
     @GET
     public Result index(Request request) {
-        // TODO: Insert the tasks using flyway instead when we know what should be in them.
-        taskHelper.insertTasks();
-        // Make sure a userSession exists
+        // TODO: Show an information page with start button here instead
+        // Make sure a userId in the current session and an accompanying user
+        sessionHelper.findOrCreateUser(request.session());
+        return Results.html("bing");
+    }
+
+    @GET
+    @Path("/start")
+    public Result start(Request request) {
+        // TODO: Use ajax to grab the first (or next if we initiate the taskId at 0) task.
+        // Make sure a userId in the current session and an accompanying user
         sessionHelper.findOrCreateUser(request.session());
         return Results.html("bing");
     }
@@ -72,15 +80,14 @@ public class ExperimentController {
         // This user is done with the experiment
         if(task == null) {
             // TODO: Redirect to questionnaire instead
-            return Results.redirect("/");
+            return Results.json("{hasNext:false}");
         }
 
         // Find all hints for the current task.
         List<Hint> hints = experimentHelper.findCurrentHints(user, task);
         List<String> textHints = hints.stream().map(Hint::getHint).collect(Collectors.toList());
 
-        Map<String, Object> results = ImmutableMap.of("task", task, "hints", hints);
-
+        Map<String, Object> results = ImmutableMap.of("hasNext",true, "task", task, "hints", hints);
         return Results.json(new Gson().toJson(results));
     }
 
@@ -100,4 +107,11 @@ public class ExperimentController {
 
         return Results.json(new Gson().toJson(result));
     }
+
+//    @GET
+//    @Path("/capture")
+//    public Result captureLinkClick(Request request) {
+//        User user = request.get("user");
+//
+//    }
 }

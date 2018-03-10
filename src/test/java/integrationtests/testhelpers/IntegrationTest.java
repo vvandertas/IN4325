@@ -1,4 +1,4 @@
-package testhelpers;
+package integrationtests.testhelpers;
 
 import com.vdtas.App;
 import org.junit.AfterClass;

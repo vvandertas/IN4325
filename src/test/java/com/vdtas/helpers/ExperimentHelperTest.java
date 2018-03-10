@@ -2,7 +2,6 @@ package com.vdtas.helpers;
 
 import com.google.common.collect.ImmutableList;
 import com.vdtas.daos.HintDao;
-import com.vdtas.daos.UserDao;
 import com.vdtas.daos.UserTaskDataDao;
 import com.vdtas.models.*;
 import com.vdtas.models.participants.ParticipantType;
@@ -57,7 +56,7 @@ public class ExperimentHelperTest {
         // make sure a user session exists
         UUID id = mockUserId(true);
 
-        User user = new User(id, ParticipantType.SPECIFIC_HINT);
+        User user = new User(id, ParticipantType.SPECIFICHINT);
         user.setCurrentTaskId(task.getId());
 
         // User is of type specific hint
@@ -66,13 +65,13 @@ public class ExperimentHelperTest {
         assertEquals("expecting 2 specific hints", 2, hints.size());
 
         // now finding the generic hint
-        user.setParticipantType(ParticipantType.GENERIC_HINT);
+        user.setParticipantType(ParticipantType.GENERICHINT);
         hints = experimentHelper.findCurrentHints(user, task);
         assertEquals(1, hints.size());
         assertEquals(Task.GENERIC_HINT, hints.get(0).getHint());
 
         // Update user to no hint
-        user.setParticipantType(ParticipantType.NO_HINT);
+        user.setParticipantType(ParticipantType.NOHINT);
         hints = experimentHelper.findCurrentHints(user, task);
         assertNotNull(hints);
         assertTrue(hints.isEmpty());

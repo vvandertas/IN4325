@@ -6,11 +6,11 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * @author vvandertas
  */
-public abstract class Participant {
+public class Participant {
     private final ParticipantType participantType;
     private int count;
 
-    protected Participant(ParticipantType participantType) {
+    public Participant(ParticipantType participantType) {
         this.participantType = participantType;
         count = 0;
     }
@@ -21,6 +21,10 @@ public abstract class Participant {
 
     public int getCount() {
         return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     public Participant increment() {
@@ -65,4 +69,11 @@ public abstract class Participant {
             return minParticipants.get(0);
     }
 
+    @Override
+    public String toString() {
+        return "Participant{" +
+                "participantType=" + participantType +
+                ", count=" + count +
+                '}';
+    }
 }

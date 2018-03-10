@@ -37,7 +37,7 @@ public class TaskHelper {
         Task nextTask = null;
         int currentTaskId = user.getCurrentTaskId();
 
-        if(1 <= currentTaskId  && currentTaskId < maxTaskId) {
+        if(0 <= currentTaskId  && currentTaskId < maxTaskId) {
             user.setCurrentTaskId(++currentTaskId);
             userDao.updateTaskId(user.getId(), currentTaskId);
 
@@ -49,5 +49,11 @@ public class TaskHelper {
 
         return nextTask;
     }
+
+    public Task findTask(int taskId) {
+        return taskDao.findById(taskId);
+    }
+
+
 
 }

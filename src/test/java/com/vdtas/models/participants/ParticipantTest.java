@@ -14,17 +14,17 @@ import static org.junit.Assert.assertNotEquals;
  */
 public class ParticipantTest {
     private List<Participant> participants;
-    private GenericHintParticipant genericHint;
-    private NoHintParticipant noHint;
-    private SpecificHintParticipant specificHint;
+    private Participant genericHint;
+    private Participant noHint;
+    private Participant specificHint;
 
     @Before
     public void setup() {
         participants = new ArrayList<>();
         // Create three hint instances
-        genericHint = new GenericHintParticipant();
-        noHint = new NoHintParticipant();
-        specificHint = new SpecificHintParticipant();
+        genericHint = new Participant(ParticipantType.GENERICHINT);
+        noHint = new Participant(ParticipantType.NOHINT);
+        specificHint = new Participant(ParticipantType.SPECIFICHINT);
 
         // and add them to the hints list
         participants.add(genericHint);

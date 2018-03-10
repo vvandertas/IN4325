@@ -1,4 +1,6 @@
 $('document').ready(function () {
+    //
+    getNextQuestion();
 
     // Handler for search submit
     $("#experimentForm").submit(function (e) {
@@ -25,14 +27,7 @@ $('document').ready(function () {
         });
     }
 
-    $("#skip").on("click", function (e) {
-        e.preventDefault();
-
-        // Move to next question
-        nextQuestion();
-    });
-
-    function nextQuestion() {
+    function getNextQuestion() {
         $.ajax({
             url: '/next',
             method: 'get',
@@ -40,43 +35,55 @@ $('document').ready(function () {
             dataType: 'json',
             success: function (data) {
                 console.log("data: ", data);
-                var parsedData = JSON.parse(data);
 
-                if(parsedData.hasNext) {
-                    // Show no results yet.
-                    $("#mainline, #paging1, #paging2").hide();
-                    $("#noresults").show();
-
-                    $("#question").html(parsedData.task.question);
-                    var hints = parsedData.hints;
-                    switch(hints.length) {
-                        case 0:
-                            $("#hints").hide();
-                            break;
-                        case 1:
-                            $("#hints").show();
-                            $("#hints").html(hints[0].hint);
-                            break;
-                        default:
-                            $("#hints").show();
-                            var html = "<ul>";
-                            hints.each(function(i) {
-                                html += "<li>" + hints[i].hint + "</li>";
-                            });
-
-                            html += "</ul>";
-
-                            $("#hints").html(html);
-                            break;
-                    }
+                if (data.hasNext) {
+                    showTaskInfo(data.task.question, data.hints);
                 } else {
                     // TODO: Error or go to questionnaire
                     console.log("NO NEXT")
                 }
+                return null;
             },
             error: function (errorData) {
                 alert("error: " + JSON.stringify(errorData));
             }
         });
     }
+
+    function showTaskInfo(question, hints) {
+        // Show no results yet.
+        $("#mainline, #paging1, #paging2").hide();
+        $("#noresults").show();
+
+        $("#question").html(question);
+
+        switch (hints.length) {
+            case 0:
+                $("#hints").hide();
+                break;
+            case 1:
+                $("#hints").show();
+                $("#hints").html(hints[0].hint);
+                break;
+            default:
+                $("#hints").show();
+                var html = "<ul>";
+                $.each(hints, function (i) {
+                    html += "<li>" + hints[i].hint + "</li>";
+                });
+
+                html += "</ul>";
+
+                $("#hints").html(html);
+                break;
+        }
+    }
+
+    $("#skip").on("click", function (e) {
+        e.preventDefault();
+
+        // Move to next question
+        getNextQuestion();
+    });
+
 });

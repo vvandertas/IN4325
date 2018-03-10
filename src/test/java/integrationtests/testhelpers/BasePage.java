@@ -1,4 +1,4 @@
-package testhelpers;
+package integrationtests.testhelpers;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -8,16 +8,16 @@ import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static testhelpers.IntegrationTest.HOST;
+import static integrationtests.testhelpers.IntegrationTest.HOST;
 
 /**
  * @author vvandertas
  */
-public class SeleniumTestHelper {
+public class BasePage {
 
     public WebDriver driver;
 
-    public SeleniumTestHelper(WebDriver driver) {
+    public BasePage(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -65,7 +65,7 @@ public class SeleniumTestHelper {
     }
 
     /**
-     * Retrieves the specified helper while not verifying for errors.
+     * Retrieves the specified page while not verifying for errors.
      *
      * @param path
      */
@@ -74,7 +74,7 @@ public class SeleniumTestHelper {
     }
 
     /**
-     * Verifies the driver is on the specified helper without an error
+     * Verifies the driver is on the specified page without an error
      *
      * @param path path
      */

@@ -1,7 +1,7 @@
 package com.vdtas.helpers;
 
-import com.google.common.collect.ImmutableList;
 import com.vdtas.daos.HintDao;
+import com.vdtas.daos.UserDao;
 import com.vdtas.daos.UserTaskDataDao;
 import com.vdtas.models.Hint;
 import com.vdtas.models.Task;
@@ -24,11 +24,6 @@ import static com.vdtas.models.Task.GENERIC_HINT;
 public class ExperimentHelper {
     private static final Logger logger = LoggerFactory.getLogger(ExperimentHelper.class);
 
-    private static NoHintParticipant noHint = new NoHintParticipant();
-    private static GenericHintParticipant genericHint = new GenericHintParticipant();
-    private static SpecificHintParticipant specificHint = new SpecificHintParticipant();
-
-
     private UserTaskDataDao dataDao;
     protected HintDao hintDao;
 
@@ -37,13 +32,6 @@ public class ExperimentHelper {
         this.dataDao = dataDao;
         this.hintDao = hintDao;
     }
-
-    //TODO: Calculate on the fly
-    public static synchronized ParticipantType selectParticipantType() {
-        Participant selectedParticipant = Participant.randomMin(ImmutableList.of(noHint, genericHint, specificHint)).increment();
-        return selectedParticipant.getParticipantType();
-    }
-
 
     /**
      * Increment query count for user's current task
@@ -84,10 +72,10 @@ public class ExperimentHelper {
         if (task != null) {
             // Find the correct hint to show
             switch (participantType) {
-                case GENERIC_HINT:
+                case GENERICHINT:
                     hints.add(new Hint(0, task.getId(), GENERIC_HINT));
                     break;
-                case SPECIFIC_HINT:
+                case SPECIFICHINT:
                     // Find all hints for task
                     hints.addAll(hintDao.findByTaskId(task.getId()));
                     break;

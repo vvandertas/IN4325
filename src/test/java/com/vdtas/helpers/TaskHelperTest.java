@@ -36,7 +36,7 @@ public class TaskHelperTest {
 
     @Test
     public void nextTaskTest_withRemainingTasks() throws Exception {
-        User user = new User(UUID.randomUUID(), ParticipantType.NO_HINT);
+        User user = new User(UUID.randomUUID(), ParticipantType.NOHINT);
         user.setCurrentTaskId(2);
 
         Task expectedTask = new Task(3, "Nice Question!", "with a name");
@@ -52,7 +52,7 @@ public class TaskHelperTest {
 
     @Test
     public void nextTaskTest_noRemainingTasks() throws Exception {
-        User user = new User(UUID.randomUUID(), ParticipantType.NO_HINT);
+        User user = new User(UUID.randomUUID(), ParticipantType.NOHINT);
         user.setCurrentTaskId(maxTaskId); // just finished last task
 
         Task nextTask = taskHelper.getNextTask(user);
@@ -64,7 +64,7 @@ public class TaskHelperTest {
 
     @Test
     public void nextTaskTest_alreadyFinished() throws Exception {
-        User user = new User(UUID.randomUUID(), ParticipantType.NO_HINT);
+        User user = new User(UUID.randomUUID(), ParticipantType.NOHINT);
         user.setCurrentTaskId(-1); // experiment was already over
 
         Task nextTask = taskHelper.getNextTask(user);

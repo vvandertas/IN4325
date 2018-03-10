@@ -50,7 +50,7 @@ public class BingSearch {
         logger.info("Received request");
 
         try {
-            String query = request.param("query").value();
+            String query = request.param("searchQuery").value();
             int offset = request.param("offset").intValue();
             int count = request.param("count").intValue();
 

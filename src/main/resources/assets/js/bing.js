@@ -175,7 +175,7 @@ $('document').ready(function () {
 
         // if spelling was corrected, update search field
         if (results.queryContext.alteredQuery)
-            document.forms.bing.query.value = results.queryContext.alteredQuery;
+            document.forms.bing.searchQuery.value = results.queryContext.alteredQuery;
 
         // add Prev / Next links with result count
         var pagingLinks = updateResultInfo(results);

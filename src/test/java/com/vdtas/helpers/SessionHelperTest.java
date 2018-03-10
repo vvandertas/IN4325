@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.vdtas.helpers.SessionHelper.*;
@@ -33,7 +34,7 @@ public class SessionHelperTest {
         mockedUserDao = mock(UserDao.class);
         mockedSession = mock(Session.class, Mockito.RETURNS_DEEP_STUBS);
 
-        sessionHelper = new SessionHelper(mockedUserDao);
+        sessionHelper = new SessionHelper("unitTest", mockedUserDao);
     }
 
     /**
@@ -76,12 +77,12 @@ public class SessionHelperTest {
     @Test
     public void findOrCreateUser_newUser() throws Exception {
         UUID userId = mockUserSession(false);
-        when(mockedUserDao.insert(eq(userId), any())).thenReturn(new User(userId, ParticipantType.NO_HINT));
+        when(mockedUserDao.insert(eq(userId), any(), anyInt())).thenReturn(new User(userId, ParticipantType.NOHINT));
 
-        User user = sessionHelper.findOrCreateUser(mockedSession);
+        User user = sessionHelper.findOrCreateUser(mockedSession, Optional.empty());
         assertNotNull(user);
         verify(mockedUserDao).findById(userId);
-        verify(mockedUserDao).insert(eq(userId), any());
+        verify(mockedUserDao).insert(eq(userId), any(), anyInt());
     }
 
     /**
@@ -95,11 +96,11 @@ public class SessionHelperTest {
 
         User user = new User();
         user.setId(existingId);
-        user.setParticipantType(ParticipantType.GENERIC_HINT);
+        user.setParticipantType(ParticipantType.GENERICHINT);
 
         when(mockedUserDao.findById(existingId)).thenReturn(user);
 
-        User foundUser = sessionHelper.findOrCreateUser(mockedSession);
+        User foundUser = sessionHelper.findOrCreateUser(mockedSession, Optional.empty());
         assertNotNull(foundUser);
         assertEquals(user, foundUser);
     }

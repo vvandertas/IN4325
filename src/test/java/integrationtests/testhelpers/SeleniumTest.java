@@ -1,4 +1,4 @@
-package testhelpers;
+package integrationtests.testhelpers;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -18,7 +18,7 @@ public class SeleniumTest extends IntegrationTest{
      */
     private static final boolean HEADLESS = false;
     protected static WebDriver driver = null;
-    protected static SeleniumTestHelper helper;
+    protected static BasePage page;
 
     @BeforeClass
     public static void seleniumSetUp() {
@@ -34,7 +34,7 @@ public class SeleniumTest extends IntegrationTest{
         }
         driver = new ChromeDriver(chromeOptions);
         driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);
-        helper = new SeleniumTestHelper(driver);
+        page = new BasePage(driver);
     }
 
     @AfterClass

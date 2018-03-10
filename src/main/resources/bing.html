@@ -3,10 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Bing Web Search API Integration</title>
-    <base target="_blank">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/bing.css">
+
+    <base target="_self">
 </head>
-<body onload="document.forms.bing.query.focus();">
+<body onload="document.forms.bing.searchQuery.focus();">
 <div class="container row" style="margin-top: 25px;">
     <div class="col-md-8">
         <form id="searchForm" method="GET" name="bing" action="/">
@@ -63,7 +66,7 @@
                 <!--TODO: Change me-->
                 <h2>Bing Web Search API Integration</h2>
 
-                <input type="text" name="query" id="term" placeholder="Search the Web" autocomplete=off>
+                <input type="text" name="searchQuery" id="term" placeholder="Search the Web" autocomplete=off>
 
                 <p>Promote
                     <input type=checkbox name="what" id="webpages" value="webpages">
@@ -165,7 +168,7 @@
                 </div>
             </div>
 
-            <input type="hidden" name="taskIndex" id="taskIndex">
+            <input type="hidden" name="taskId" id="taskId">
             <a href='#' id="skip" style="float:right">Skip</a>
         </form>
     </div>
@@ -175,12 +178,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
 <!-- Bootstrap -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
 <script type="text/javascript" src="assets/js/bing.js"></script>
 <script type="text/javascript" src="assets/js/experiment.js"></script>
-<link rel="stylesheet" type="text/css" href="assets/css/bing.css">
 
 </body>
 </html>

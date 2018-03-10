@@ -53,14 +53,16 @@ public class App extends Jooby {
         );
 
         before((req, rsp) -> {
-            if (!req.path().equals("/")) {
-                logger.debug("Not in path /, so finding user");
+            if (!req.path().equals("/") && !req.path().equals("/experiment")) {
+                logger.debug("Finding user");
                 if (req.session().isSet("userId")) {
                     UserDao userDao = req.require(UserDao.class);
 
                     User user = userDao.findById(UUID.fromString(req.session().get("userId").value()));
+                    if(user != null) {
                     logger.debug("Found user: " + user.toString());
                     req.set("user", user);
+                    }
                 } else {
                     logger.debug("userId was not set on session.");
                 }
@@ -80,7 +82,8 @@ public class App extends Jooby {
         cookieSession();
 
         // access to css and js files
-        assets("/assets/**/**");
+        assets("/assets/css/**");
+        assets("/assets/js/**");
 
         // MVC routing
         use(ExperimentController.class);

@@ -9,6 +9,7 @@ import com.vdtas.models.*;
 import org.jooby.Request;
 import org.jooby.Result;
 import org.jooby.Results;
+import org.jooby.Session;
 import org.jooby.mvc.GET;
 import org.jooby.mvc.POST;
 import org.jooby.mvc.Path;
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -50,18 +52,15 @@ public class ExperimentController {
      */
     @GET
     public Result index(Request request) {
-        // TODO: Show an information page with start button here instead
-        // Make sure a userId in the current session and an accompanying user
-        sessionHelper.findOrCreateUser(request.session());
-        return Results.html("bing");
+        return Results.html("landing"); // TODO: Update landing page
     }
 
     @GET
-    @Path("/start")
-    public Result start(Request request) {
+    @Path("/experiment")
+    public Result start(Session session, Optional<String> forceType) {
         // TODO: Use ajax to grab the first (or next if we initiate the taskId at 0) task.
         // Make sure a userId in the current session and an accompanying user
-        sessionHelper.findOrCreateUser(request.session());
+        sessionHelper.findOrCreateUser(session, forceType);
         return Results.html("bing");
     }
 
@@ -80,7 +79,7 @@ public class ExperimentController {
         // This user is done with the experiment
         if(task == null) {
             // TODO: Redirect to questionnaire instead
-            return Results.json("{hasNext:false}");
+            return Results.json(ImmutableMap.of("hasNext", false));
         }
 
         // Find all hints for the current task.
@@ -88,7 +87,7 @@ public class ExperimentController {
         List<String> textHints = hints.stream().map(Hint::getHint).collect(Collectors.toList());
 
         Map<String, Object> results = ImmutableMap.of("hasNext",true, "task", task, "hints", hints);
-        return Results.json(new Gson().toJson(results));
+        return Results.json(results);
     }
 
     @POST
@@ -98,14 +97,14 @@ public class ExperimentController {
         boolean success = false;
         String message = "";
 
-        Task task = Tasks.getTasks().get(taskResponse.getTaskIndex());
+        Task task = taskHelper.findTask(taskResponse.getTaskIndex());
 
         // TODO: validate url and answer text.
 
         result.put("success", success);
         result.put("message", message);
 
-        return Results.json(new Gson().toJson(result));
+        return Results.json(result);
     }
 
 //    @GET

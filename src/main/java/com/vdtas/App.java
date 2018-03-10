@@ -64,6 +64,7 @@ public class App extends Jooby {
                     req.set("user", user);
                     }
                 } else {
+                    // TODO: Redirect to landing page
                     logger.debug("userId was not set on session.");
                 }
             }

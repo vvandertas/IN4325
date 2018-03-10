@@ -1,4 +1,4 @@
-package com.vdtas.models;
+package com.vdtas.models.search;
 
 import java.util.HashMap;
 

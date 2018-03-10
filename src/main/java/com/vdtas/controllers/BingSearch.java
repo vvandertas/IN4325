@@ -8,7 +8,8 @@ import javax.inject.Named;
 import javax.net.ssl.HttpsURLConnection;
 
 import com.vdtas.helpers.ExperimentHelper;
-import com.vdtas.models.SearchResults;
+import com.vdtas.models.search.SearchParameters;
+import com.vdtas.models.search.SearchResults;
 import com.vdtas.models.User;
 import org.jooby.Request;
 import org.jooby.Result;
@@ -26,10 +27,9 @@ public class BingSearch {
      */
     private final String subscriptionKey;
     /**
-     * Bing API host and path used for placing search requests
+     * Bing API BING_ENDPOINT and path used for placing search requests
      */
-    private static String host = "https://api.cognitive.microsoft.com";
-    private static String path = "/bing/v7.0/search";
+    private static final String BING_ENDPOINT = "https://api.cognitive.microsoft.com/bing/v7.0/search";
     private final Logger logger = LoggerFactory.getLogger(BingSearch.class);
     private ExperimentHelper experimentHelper;
 
@@ -40,9 +40,8 @@ public class BingSearch {
     }
 
     @GET
-    public Result processRequest(Request request) {
+    public Result processRequest(Request request, SearchParameters searchParameters) {
         User user = request.get("user");
-
         // Increment search count
         experimentHelper.incrementQueryCount(user);
 
@@ -50,11 +49,7 @@ public class BingSearch {
         logger.info("Received request");
 
         try {
-            String query = request.param("searchQuery").value();
-            int offset = request.param("offset").intValue();
-            int count = request.param("count").intValue();
-
-            result = searchWeb(query, offset, count);
+            result = searchWeb(searchParameters);
 
         } catch (Exception e) {
             logger.error("An error occurred while processing search request", e);
@@ -66,19 +61,19 @@ public class BingSearch {
     /**
      * Perform the Bing API WebSearch request
      *
-     * @param searchQuery
+     * @param searchParameters all search parameters for this search request.
      * @return
      * @throws Exception
      */
-    private SearchResults searchWeb(String searchQuery, Integer offset, Integer count) throws Exception {
-        String getParams = "?q=" + URLEncoder.encode(searchQuery, "UTF-8");
-        getParams += "&offset=" + (offset != null ? String.valueOf(offset) : "0");
-        getParams += "&count=" + (count != null ? String.valueOf(count) : "20"); // default to 20 results
+    private SearchResults searchWeb(SearchParameters searchParameters) throws Exception {
+        String getParams = "?q=" + URLEncoder.encode(searchParameters.getSearchQuery(), "UTF-8");
+        getParams += "&offset=" +  String.valueOf(searchParameters.getOffset());
+        getParams += "&count=" + String.valueOf(searchParameters.getCount());
         getParams += "&responseFilter=Webpages"; // Only return web pages
 
         // TODO: include more?
         // construct URL of search request (endpoint + query string)
-        URL url = new URL(host + path + getParams);
+        URL url = new URL(BING_ENDPOINT + getParams);
 
         HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
         connection.setRequestProperty("Ocp-Apim-Subscription-Key", subscriptionKey);

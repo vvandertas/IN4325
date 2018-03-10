@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="assets/css/bing.css">
 
-    <base target="_self">
+    <base target="_blank">
 </head>
 <body onload="document.forms.bing.searchQuery.focus();">
 <div class="container row" style="margin-top: 25px;">
@@ -62,7 +62,7 @@
                 <p>from Microsoft Cognitive Services
             </div>
 
-            <div id="query"><!-- query controls including search field and options -->
+            <div id="searchQuery"><!-- searchQuery controls including search field and options -->
                 <!--TODO: Change me-->
                 <h2>Bing Web Search API Integration</h2>
 
@@ -169,6 +169,7 @@
             </div>
 
             <input type="hidden" name="taskId" id="taskId">
+            <input type="hidden" name="taskId" id="userId">
             <a href='#' id="skip" style="float:right">Skip</a>
         </form>
     </div>

@@ -1,12 +1,8 @@
 package com.vdtas.helpers;
 
 import com.vdtas.daos.HintDao;
-import com.vdtas.daos.UserDao;
 import com.vdtas.daos.UserTaskDataDao;
-import com.vdtas.models.Hint;
-import com.vdtas.models.Task;
-import com.vdtas.models.User;
-import com.vdtas.models.UserTaskData;
+import com.vdtas.models.*;
 import com.vdtas.models.participants.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,4 +83,7 @@ public class ExperimentHelper {
         return hints;
     }
 
+    public void captureClick(ClickCapture clickCapture) {
+        dataDao.captureUrlClick(clickCapture);
+    }
 }

@@ -37,7 +37,7 @@ $('document').ready(function () {
                 console.log("data: ", data);
 
                 if (data.hasNext) {
-                    showTaskInfo(data.task.question, data.hints);
+                    showTaskInfo(data.task, data.hints);
                 } else {
                     // TODO: Error or go to questionnaire
                     console.log("NO NEXT")
@@ -50,12 +50,13 @@ $('document').ready(function () {
         });
     }
 
-    function showTaskInfo(question, hints) {
+    function showTaskInfo(task, hints) {
         // Show no results yet.
         $("#mainline, #paging1, #paging2").hide();
         $("#noresults").show();
 
-        $("#question").html(question);
+        $("#question").html(task.question);
+        $("#taskId").val(task.id);
 
         switch (hints.length) {
             case 0:
@@ -86,4 +87,26 @@ $('document').ready(function () {
         getNextQuestion();
     });
 
+
 });
+    function bindCaptureCallback() {
+        $(".webPages a").on("click", function (e) {
+
+            console.log("Clicked on link: " + this.href);
+            var link = this.href;
+
+            $.ajax({
+                url: '/capture',
+                method: 'post',
+                data: JSON.stringify({url: link, taskId: $('#taskId').val()}),
+                contentType: 'application/json',
+                dataType:'json',
+                success: function(data) {
+                    console.log("Done. Opening link");
+                }, error: function (errorData) {
+                    alert("error: " + JSON.stringify(errorData));
+                }
+            })
+
+        });
+    }

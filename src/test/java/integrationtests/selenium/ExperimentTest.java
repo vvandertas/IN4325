@@ -64,4 +64,25 @@ public class ExperimentTest extends SeleniumTest {
 
     }
 
+    @Test
+    public void captureClicksTest() {
+        // Submit the test query
+        experimentsPage.submitTestQuery();
+
+        // Click first link
+        String href = experimentsPage.clickFirstLink();
+
+
+        // Ensure we are still on the same page
+        // Make sure the noresults tag is not displayed
+        assertFalse(experimentsPage.noresultsIsDisplayed());
+
+        // Validate paging is present twice
+        assertEquals(2, experimentsPage.countDisplayedPaging());
+
+        // Validate we have 20 results displayed
+        assertEquals(20, experimentsPage.countDisplayedSearchResults());
+
+    }
+
 }

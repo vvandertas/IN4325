@@ -43,25 +43,25 @@ public class App extends Jooby {
                 })
                 // Create a transaction per request and attach all dao's
                 .transactionPerRequest(
-                    new TransactionalRequest()
-                        .attach(SessionDao.class)
-                        .attach(UserDao.class)
-                        .attach(TaskDao.class)
-                        .attach(UserTaskDataDao.class)
-                        .attach(HintDao.class)
+                        new TransactionalRequest()
+                                .attach(SessionDao.class)
+                                .attach(UserDao.class)
+                                .attach(TaskDao.class)
+                                .attach(UserTaskDataDao.class)
+                                .attach(HintDao.class)
                 )
         );
 
         before((req, rsp) -> {
             if (!req.path().equals("/") && !req.path().equals("/experiment")) {
-                logger.debug("Finding user");
+                logger.debug("Finding user for path " + req.path());
                 if (req.session().isSet("userId")) {
                     UserDao userDao = req.require(UserDao.class);
 
                     User user = userDao.findById(UUID.fromString(req.session().get("userId").value()));
-                    if(user != null) {
-                    logger.debug("Found user: " + user.toString());
-                    req.set("user", user);
+                    if (user != null) {
+                        logger.debug("Found user: " + user.toString());
+                        req.set("user", user);
                     }
                 } else {
                     // TODO: Redirect to landing page

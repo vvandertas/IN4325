@@ -40,6 +40,9 @@ public class ExperimentsPage extends BasePage {
     @FindBy(className="webPages")
     private List<WebElement> searchResults;
 
+    @FindBy(css=".webPages a")
+    private List<WebElement> searchResultLinks;
+
 
     public ExperimentsPage(WebDriver driver) {
         super(driver);
@@ -71,5 +74,13 @@ public class ExperimentsPage extends BasePage {
 
     public int countDisplayedSearchResults() {
         return (int) searchResults.stream().filter(WebElement::isDisplayed).count();
+    }
+
+    public String clickFirstLink() {
+        WebElement firstLink = searchResultLinks.get(0);
+        firstLink.click();
+
+        return firstLink.getAttribute("href");
+
     }
 }

@@ -1,7 +1,6 @@
 package com.vdtas.controllers;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.Gson;
 import com.vdtas.helpers.ExperimentHelper;
 import com.vdtas.helpers.SessionHelper;
 import com.vdtas.helpers.TaskHelper;
@@ -10,9 +9,7 @@ import org.jooby.Request;
 import org.jooby.Result;
 import org.jooby.Results;
 import org.jooby.Session;
-import org.jooby.mvc.GET;
-import org.jooby.mvc.POST;
-import org.jooby.mvc.Path;
+import org.jooby.mvc.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +55,6 @@ public class ExperimentController {
     @GET
     @Path("/experiment")
     public Result start(Session session, Optional<String> forceType) {
-        // TODO: Use ajax to grab the first (or next if we initiate the taskId at 0) task.
         // Make sure a userId in the current session and an accompanying user
         sessionHelper.findOrCreateUser(session, forceType);
         return Results.html("bing");
@@ -107,10 +103,15 @@ public class ExperimentController {
         return Results.json(result);
     }
 
-//    @GET
-//    @Path("/capture")
-//    public Result captureLinkClick(Request request) {
-//        User user = request.get("user");
-//
-//    }
+    @POST
+    @Path("/capture")
+    @Consumes("application/json")
+    public Result captureLinkClick(@Body ClickCapture clickCapture, @Local User user) {
+
+        // set the userId for this click and insert it into the db
+        clickCapture.setUserId(user.getId());
+        experimentHelper.captureClick(clickCapture);
+
+        return Results.json(ImmutableMap.of("success", true));
+    }
 }

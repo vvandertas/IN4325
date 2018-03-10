@@ -46,6 +46,8 @@ $('document').ready(function () {
             dataType: 'json',
             success: function (data) {
                 showResults(data); // display search results
+                bindCaptureCallback(); // and bind capture callback
+
             },
             error: function (errorData) {
                 alert("error: " + JSON.stringify(errorData));
@@ -65,35 +67,7 @@ $('document').ready(function () {
     });
 
 
-
-    // Keep track of cookies/localStorage
-    try {
-        localStorage.getItem;   // try localStorage
-
-        window.retrieveValue = function (name) {
-            return localStorage.getItem(name) || "";
-        }
-        window.storeValue = function (name, value) {
-            localStorage.setItem(name, value);
-        }
-    } catch (e) {
-        window.retrieveValue = function (name) {
-            var cookies = document.cookie.split(";");
-            for (var i = 0; i < cookies.length; i++) {
-                var keyvalue = cookies[i].split("=");
-                if (keyvalue[0].trim() === name) return keyvalue[1];
-            }
-            return "";
-        }
-        window.storeValue = function (name, value) {
-            var expiry = new Date();
-            expiry.setFullYear(expiry.getFullYear() + 1);
-            document.cookie = name + "=" + value.trim() + "; expires=" + expiry.toUTCString();
-        }
-    }
-
-
-    // get the host portion of a URL, strpping out search result formatting and www too
+    // get the host portion of a URL, stripping out search result formatting and www too
     function getHost(url) {
         return url.replace(/<\/?b>/g, "").replace(/^https?:\/\//, "").split("/")[0].replace(/^www\./, "");
     }
@@ -127,7 +101,7 @@ $('document').ready(function () {
         // render Web page result
         webPages: function (item) {
             var html = [];
-            html.push("<p class='webPages'><a href='" + item.url + "'>" + item.name + "</a>");
+            html.push("<p class='webPages'><a class='webLink' href='" + item.url + "'>" + item.name + "</a>");
             html.push(" (" + getHost(item.displayUrl) + ")");
             html.push("<br>" + item.snippet);
             if ("deepLinks" in item) {
@@ -140,7 +114,7 @@ $('document').ready(function () {
             }
             return html.join("");
         }
-    }
+    };
 
     // render search results from rankingResponse object in specified order
     function renderResultsItems(section, results) {

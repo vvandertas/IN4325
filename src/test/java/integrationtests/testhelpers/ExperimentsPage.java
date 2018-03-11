@@ -1,12 +1,11 @@
 package integrationtests.testhelpers;
 
-import org.openqa.selenium.JavascriptExecutor;
+import com.vdtas.helpers.Routes;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -65,7 +64,8 @@ public class ExperimentsPage extends BasePage {
 
     public void open(String participantType) {
         this.get(Routes.EXPERIMENT +"?forceType=" + participantType);
-        waitUntilQuestionIsVisible();
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.visibilityOf(question));
     }
 
     public void submitTestQuery() {
@@ -96,7 +96,6 @@ public class ExperimentsPage extends BasePage {
         firstLink.click();
 
         return firstLink.getAttribute("href");
-
     }
 
     public String findQuestion() {
@@ -111,10 +110,6 @@ public class ExperimentsPage extends BasePage {
         return hintsDiv.isDisplayed();
     }
 
-    public void waitUntilQuestionIsVisible() {
-        WebDriverWait wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.visibilityOf(question));
-    }
 
     public void submitAnswer(String answer, boolean expectFailure) {
         answerField.clear();
@@ -145,5 +140,4 @@ public class ExperimentsPage extends BasePage {
     public String getTextAnswer() {
         return answerField.getAttribute("value");
     }
-
 }

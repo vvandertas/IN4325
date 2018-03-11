@@ -20,11 +20,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static com.vdtas.helpers.Routes.*;
+
 
 /**
  * @author vvandertas
  */
-@Path("/")
+@Path(LANDING)
 public class ExperimentController {
 
     private final Logger logger = LoggerFactory.getLogger(ExperimentController.class);
@@ -53,7 +55,7 @@ public class ExperimentController {
     }
 
     @GET
-    @Path("/experiment")
+    @Path(EXPERIMENT)
     public Result start(Session session, Optional<String> forceType) {
         // Make sure a userId in the current session and an accompanying user
         sessionHelper.findOrCreateUser(session, forceType);
@@ -66,7 +68,7 @@ public class ExperimentController {
      * @return
      */
     @GET
-    @Path("/next")
+    @Path(NEXT)
     public Result nextTask(Request request) {
         User user = request.get("user");
         // then move to next task, if available
@@ -87,7 +89,7 @@ public class ExperimentController {
     }
 
     @POST
-    @Path("/validate")
+    @Path(VALIDATE)
     public Result validateAnswer(@Body TaskResponse taskResponse, @Local User user) {
         Map<String, Object> result = new HashMap<>();
         boolean success = false;
@@ -106,7 +108,7 @@ public class ExperimentController {
     }
 
     @POST
-    @Path("/capture")
+    @Path(CAPTURE)
     @Consumes("application/json")
     public Result captureLinkClick(@Body ClickCapture clickCapture, @Local User user) {
 

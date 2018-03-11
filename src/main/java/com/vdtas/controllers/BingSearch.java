@@ -19,7 +19,9 @@ import org.jooby.mvc.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Path("/search")
+import static com.vdtas.helpers.Routes.SEARCH;
+
+@Path(SEARCH)
 public class BingSearch {
 
     /**

@@ -1,5 +1,6 @@
 package integrationtests.testhelpers;
 
+import com.vdtas.helpers.Routes;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -28,7 +29,6 @@ public class LandingPage extends BasePage {
 
     public void clickStartButton() {
         startButton.click();
-//        waitForPageChange(Routes.EXPERIMENT);
     }
 
     public void validateInstructions() {

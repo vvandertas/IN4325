@@ -1,4 +1,4 @@
-package integrationtests.testhelpers;
+package com.vdtas.helpers;
 
 /**
  * @author vvandertas

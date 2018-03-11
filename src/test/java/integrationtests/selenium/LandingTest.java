@@ -3,7 +3,7 @@ package integrationtests.selenium;
 import org.junit.Before;
 import org.junit.Test;
 import integrationtests.testhelpers.LandingPage;
-import integrationtests.testhelpers.Routes;
+import com.vdtas.helpers.Routes;
 import integrationtests.testhelpers.SeleniumTest;
 
 /**

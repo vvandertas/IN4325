@@ -72,7 +72,7 @@ public class ExperimentController {
 
         // This user is done with the experiment
         if(task == null) {
-            // TODO: Redirect to questionnaire instead
+            // TODO: Redirect to showQuestionnaire instead
             return Results.json(ImmutableMap.of("task", "null"));
         }
 
@@ -92,6 +92,8 @@ public class ExperimentController {
         // Increment task id for user, if next task is available
         boolean hasNext = taskHelper.getNextTask(user);
         Map<String, Object> results = ImmutableMap.of("hasNext",hasNext);
+
+        // TODO: Insert initial UserTaskData object
 
         return Results.json(results);
     }
@@ -138,5 +140,18 @@ public class ExperimentController {
         experimentHelper.captureClick(clickCapture);
 
         return Results.json(ImmutableMap.of("success", true));
+    }
+
+    @GET
+    @Path(QUESTIONNAIRE)
+    public Result showQuestionnaire(@Local User user) {
+        return Results.html("questionnaire"); // TODO: Populate
+    }
+
+    @POST
+    @Path(QUESTIONNAIRE)
+    public Result saveAnswers(@Local User user) {
+        // TODO: store showQuestionnaire submission in users table as json
+        return Results.ok();
     }
 }

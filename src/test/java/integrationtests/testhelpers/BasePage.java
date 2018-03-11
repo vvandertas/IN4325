@@ -2,8 +2,10 @@ package integrationtests.testhelpers;
 
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import static org.junit.Assert.assertEquals;
@@ -25,24 +27,19 @@ public class BasePage {
      * @return
      * @see <a href="https://stackoverflow.com/a/33349203/52057"/>
      */
-    public boolean waitForAjax() {
+    protected boolean waitForAjax() {
         WebDriverWait wait = new WebDriverWait(driver, 30);
 
         // wait for jQuery to load
-        Function<WebDriver, Boolean> jQueryLoad = driver -> {
+        ExpectedCondition<Boolean> jQueryLoad = driver -> {
             try {
-                return ((Long) ((JavascriptExecutor) driver).executeScript("return jQuery.active") == 0);
+                return (Boolean) ((JavascriptExecutor) driver).executeScript("return document.readyState === \"complete\" && (jQuery === 'undefined' || jQuery.active === 0)");
             } catch(Exception e) {
                 // no jQuery present
                 return true;
             }
         };
-
-        // wait for Javascript to load
-        Function<WebDriver, Boolean> jsLoad = driver -> ((JavascriptExecutor) driver).executeScript("return document.readyState")
-                .toString().equals("complete");
-
-        return wait.until(jQueryLoad) && wait.until(jsLoad);
+        return wait.until(jQueryLoad);
     }
 
     /**

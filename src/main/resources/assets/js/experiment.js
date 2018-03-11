@@ -1,32 +1,11 @@
 $('document').ready(function () {
-    //
+    // Get the first question
     getNextQuestion();
 
-    // Handler for search submit
-    $("#experimentForm").submit(function (e) {
-        e.preventDefault();
-        //TODO: Validate answer, show feedback and move to next question (if possible)
-        validate()
-    });
-
-    function validate() {
-
-        $.ajax({
-            url: '/validate',
-            method: 'get',
-            data: $("#experimentForm").serialize(),
-            contentType: 'application/json',
-            dataType: 'json',
-            success: function (data) {
-                console.log("Validated answer!");
-
-            },
-            error: function (errorData) {
-                alert("error: " + JSON.stringify(errorData));
-            }
-        });
-    }
-
+    /**
+     * Get the next task for the user and show the appropriate question + hint(s).
+     * Redirect to questionnaire if there are no next questions
+     */
     function getNextQuestion() {
         $.ajax({
             url: '/next',
@@ -50,24 +29,33 @@ $('document').ready(function () {
         });
     }
 
+    /**
+     * Show the question and hints for the current task and user
+     *
+     * @param task
+     * @param hints
+     */
     function showTaskInfo(task, hints) {
         // Show no results yet.
         $("#mainline, #paging1, #paging2").hide();
         $("#noresults").show();
+
+        // Show experiments div
+        $("#experiment").show();
 
         $("#question").html(task.question);
         $("#taskId").val(task.id);
 
         switch (hints.length) {
             case 0:
-                $("#hints").hide();
+                $("#hints-div").hide();
                 break;
             case 1:
-                $("#hints").show();
+                $("#hints-div").show();
                 $("#hints").html(hints[0].hint);
                 break;
             default:
-                $("#hints").show();
+                $("#hints-div").show();
                 var html = "<ul>";
                 $.each(hints, function (i) {
                     html += "<li>" + hints[i].hint + "</li>";
@@ -87,8 +75,41 @@ $('document').ready(function () {
         getNextQuestion();
     });
 
+    // Handler for search submit
+    $("#experimentForm").submit(function (e) {
+        e.preventDefault();
+
+        validate()
+    });
+
+    /**
+     * Validate answer.
+     * If correct move to the next question (or questionnaire if this was the last question)
+     * else show feedback
+     */
+    function validate() {
+        $.ajax({
+            url: '/validate',
+            method: 'get',
+            data: $("#experimentForm").serialize(),
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (data) {
+                console.log("Validated answer!");
+            },
+            error: function (errorData) {
+                alert("error: " + errorData);
+            }
+        });
+    }
+
 
 });
+
+    /**
+     *  Only after displaying the search results the link clicks can be bound.
+     *  On click we open the clicked page as normal but also capture what link was clicked
+     */
     function bindCaptureCallback() {
         $(".webPages a").on("click", function (e) {
 

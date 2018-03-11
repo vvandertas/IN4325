@@ -46,7 +46,7 @@ public class SessionHelperTest {
     public void findOrCreateUserId_newUserId() throws Exception {
 
         UUID uuid = mockUserSession(false);
-        UUID userId = sessionHelper.findOrCreateUserId(mockedSession);
+        UUID userId = sessionHelper.findOrCreateUserId(mockedSession, Optional.empty());
         verify(mockedSession).set(eq(USER_ID), any());
 
         assertNotNull(userId);
@@ -62,7 +62,7 @@ public class SessionHelperTest {
     public void findOrCreateUserId_existingUserId() throws Exception {
 
         UUID uuid = mockUserSession(true);
-        UUID userId = sessionHelper.findOrCreateUserId(mockedSession);
+        UUID userId = sessionHelper.findOrCreateUserId(mockedSession, Optional.empty());
         verify(mockedSession, never()).set(eq(USER_ID), any());
 
         assertNotNull(userId);

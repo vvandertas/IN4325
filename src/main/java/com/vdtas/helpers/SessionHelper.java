@@ -28,7 +28,7 @@ public class SessionHelper {
     }
 
     public User findOrCreateUser(Session session, Optional<String> forceType) {
-        UUID userId = findOrCreateUserId(session);
+        UUID userId = findOrCreateUserId(session, forceType);
 
         User user = userDao.findById(userId);
         if (user == null) {
@@ -48,8 +48,8 @@ public class SessionHelper {
      * @param session
      * @return
      */
-    protected UUID findOrCreateUserId(Session session) {
-        if (!session.get(USER_ID).isSet()) {
+    protected UUID findOrCreateUserId(Session session, Optional<String> forceType) {
+        if (!session.get(USER_ID).isSet() || ("test".equals(env) && forceType.isPresent())) {
             logger.info("Session id not found. Creating one now");
             session.set(USER_ID, UUID.randomUUID().toString());
         } else {

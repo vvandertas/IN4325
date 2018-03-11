@@ -27,7 +27,7 @@
         </div>
 
         <input type="hidden" name="taskId" id="taskId">
-        <a type="submit" class="btn btn-info">Submit</a>
+        <button type="submit" class="btn btn-info">Submit</button>
     </form>
     <a href='#' id="skip" style="float:right">Skip</a>
 </div>

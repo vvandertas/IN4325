@@ -78,7 +78,7 @@ $('document').ready(function () {
         e.preventDefault();
 
         // Move to next question
-        getTaskData();
+        nextTask();
     });
 
     // Handler for search submit
@@ -96,7 +96,11 @@ $('document').ready(function () {
             dataType: 'json',
             success: function (data) {
                 console.log("data: ", data);
-                return data.hasNext;
+                if(data.hasNext) {
+                    getTaskData();
+                } else {
+                    // TODO: Redirect to questionnaire
+                }
             },
             error: function (errorData) {
                 alert("error: " + JSON.stringify(errorData));
@@ -120,12 +124,7 @@ $('document').ready(function () {
                 console.log("Validated answer!");
 
                 if(data.success) {
-                    if(nextTask()) {
-                        getTaskData();
-                    } else {
-                        // TODO: Go to questionnaire
-                    }
-
+                    nextTask();
                 } else {
                     // TODO: Update modal and potential hard code message in the ftl file
                     $("#failureAlert .modal-body p").html(data.message);

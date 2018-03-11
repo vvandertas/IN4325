@@ -27,7 +27,7 @@ public class App extends Jooby {
 
     {
         // template engine
-        use(new Ftl("/", ".ftl"));
+        use(new Ftl("views/", ".ftl"));
 
         // live reload
         use(new LiveReload());

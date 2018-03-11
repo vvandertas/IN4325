@@ -171,7 +171,7 @@
             </div>
 
             <input type="hidden" name="taskId" id="taskId">
-            <a type="submit" class="btn">Submit</a>
+            <a type="submit" class="btn btn-info">Submit</a>
         </form>
         <a href='#' id="skip" style="float:right">Skip</a>
     </div>

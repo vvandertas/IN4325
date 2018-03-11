@@ -26,7 +26,6 @@ import static com.vdtas.helpers.Routes.*;
 /**
  * @author vvandertas
  */
-@Path(LANDING)
 public class ExperimentController {
 
     private final Logger logger = LoggerFactory.getLogger(ExperimentController.class);
@@ -46,11 +45,10 @@ public class ExperimentController {
 
     /**
      * Show the landing page
-     * @param request
-     * @return
      */
     @GET
-    public Result index(Request request) {
+    @Path(LANDING)
+    public Result index() {
         return Results.html("landing"); // TODO: Update landing page
     }
 
@@ -63,31 +61,48 @@ public class ExperimentController {
     }
 
     /**
-     * Provide the user with a task
-     * @param request
+     * Find current task info for a user
+     * @param user
      * @return
      */
     @GET
-    @Path(NEXT)
-    public Result nextTask(Request request) {
-        User user = request.get("user");
-        // then move to next task, if available
-        Task task = taskHelper.getNextTask(user);
+    @Path(TASKDATA)
+    public Result getTaskData(@Local User user) {
+        Task task = taskHelper.findTask(user.getCurrentTaskId());
 
         // This user is done with the experiment
         if(task == null) {
             // TODO: Redirect to questionnaire instead
-            return Results.json(ImmutableMap.of("hasNext", false));
+            return Results.json(ImmutableMap.of("task", "null"));
         }
 
         // Find all hints for the current task.
         List<Hint> hints = experimentHelper.findCurrentHints(user, task);
-        List<String> textHints = hints.stream().map(Hint::getHint).collect(Collectors.toList());
 
-        Map<String, Object> results = ImmutableMap.of("hasNext",true, "task", task, "hints", hints);
+        Map<String, Object> results = ImmutableMap.of("task", task, "hints", hints);
         return Results.json(results);
     }
 
+    /**
+     * Assign next task to the user
+     */
+    @GET
+    @Path(NEXT)
+    public Result nextTask(@Local User user) {
+        // Increment task id for user, if next task is available
+        boolean hasNext = taskHelper.getNextTask(user);
+        Map<String, Object> results = ImmutableMap.of("hasNext",hasNext);
+
+        return Results.json(results);
+    }
+
+    /**
+     * Validate a users task response
+     *
+     * @param taskResponse object containing users answer and submitted url
+     * @param user current user
+     * @return
+     */
     @POST
     @Path(VALIDATE)
     public Result validateAnswer(@Body TaskResponse taskResponse, @Local User user) {
@@ -107,6 +122,12 @@ public class ExperimentController {
         return Results.json(result);
     }
 
+    /**
+     * Capture a users search result click, used for post processing of the data.
+     * @param clickCapture wrapper for userId, taskId and url clicked
+     * @param user current user
+     * @return
+     */
     @POST
     @Path(CAPTURE)
     @Consumes("application/json")

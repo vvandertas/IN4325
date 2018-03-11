@@ -77,12 +77,12 @@ public class SessionHelperTest {
     @Test
     public void findOrCreateUser_newUser() throws Exception {
         UUID userId = mockUserSession(false);
-        when(mockedUserDao.insert(eq(userId), any(), anyInt())).thenReturn(new User(userId, ParticipantType.NOHINT));
+        when(mockedUserDao.insert(eq(userId), any())).thenReturn(new User(userId, ParticipantType.NOHINT));
 
         User user = sessionHelper.findOrCreateUser(mockedSession, Optional.empty());
         assertNotNull(user);
         verify(mockedUserDao).findById(userId);
-        verify(mockedUserDao).insert(eq(userId), any(), anyInt());
+        verify(mockedUserDao).insert(eq(userId), any());
     }
 
     /**

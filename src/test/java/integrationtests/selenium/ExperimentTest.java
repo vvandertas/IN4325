@@ -29,6 +29,11 @@ public class ExperimentTest extends SeleniumTest {
         validateInitialQuestion();
 
         assertFalse("Expecting hints element to be hidden", experimentsPage.hintIsDisplayed());
+
+        // refresh page and validate we still have the same question
+        experimentsPage.open(ParticipantType.NOHINT.toString());
+
+        validateInitialQuestion();
     }
 
     @Test
@@ -100,7 +105,6 @@ public class ExperimentTest extends SeleniumTest {
 
         // Validate we have 20 results displayed
         assertEquals(20, experimentsPage.countDisplayedSearchResults());
-
     }
 
     private void initiateExperiment(ParticipantType participantType) {

@@ -22,9 +22,9 @@ public interface UserDao {
      * @param id
      * @param participantType
      */
-    @SqlQuery("INSERT INTO users(id, participant_type, current_task_id) VALUES (:id, :participantType, :taskId) RETURNING *;")
+    @SqlQuery("INSERT INTO users(id, participant_type) VALUES (:id, :participantType) RETURNING *;")
     @RegisterBeanMapper(User.class)
-    User insert(@Bind("id") UUID id, @Bind("participantType") String participantType, @Bind("taskId") int taskId);
+    User insert(@Bind("id") UUID id, @Bind("participantType") String participantType);
 
     /**
      * Find user by id

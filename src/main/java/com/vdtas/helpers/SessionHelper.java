@@ -36,7 +36,7 @@ public class SessionHelper {
 
             // Create new user and assign a participant type.
             ParticipantType participantType = selectParticipantType(forceType);
-            user = userDao.insert(userId, participantType.toString(), 0);
+            user = userDao.insert(userId, participantType.toString());
         }
 
         return user;

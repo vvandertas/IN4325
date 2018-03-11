@@ -1,26 +1,26 @@
 $('document').ready(function () {
     // Get the first question
-    getNextQuestion();
+    getTaskData();
 
     /**
      * Get the next task for the user and show the appropriate question + hint(s).
      * Redirect to questionnaire if there are no next questions
      */
-    function getNextQuestion() {
+    function getTaskData() {
         $.ajax({
-            url: '/next',
+            url: '/taskData',
             method: 'get',
             contentType: 'application/json',
             dataType: 'json',
             success: function (data) {
                 console.log("data: ", data);
 
-                if (data.hasNext) {
+                if (data.task !== "null") {
                     showTaskInfo(data.task, data.hints);
                     clearAnswerForm();
                 } else {
                     // TODO: Error or go to questionnaire
-                    console.log("NO NEXT")
+                    console.log("NO TASK DATA")
                 }
                 return null;
             },
@@ -78,7 +78,7 @@ $('document').ready(function () {
         e.preventDefault();
 
         // Move to next question
-        getNextQuestion();
+        getTaskData();
     });
 
     // Handler for search submit
@@ -87,6 +87,22 @@ $('document').ready(function () {
 
         validate()
     });
+
+    function nextTask() {
+        $.ajax({
+            url: '/next',
+            method: 'get',
+            contentType: 'application/json',
+            dataType: 'json',
+            success: function (data) {
+                console.log("data: ", data);
+                return data.hasNext;
+            },
+            error: function (errorData) {
+                alert("error: " + JSON.stringify(errorData));
+            }
+        });
+    }
 
     /**
      * Validate answer.
@@ -104,7 +120,11 @@ $('document').ready(function () {
                 console.log("Validated answer!");
 
                 if(data.success) {
-                    getNextQuestion();
+                    if(nextTask()) {
+                        getTaskData();
+                    } else {
+                        // TODO: Go to questionnaire
+                    }
 
                 } else {
                     // TODO: Update modal and potential hard code message in the ftl file

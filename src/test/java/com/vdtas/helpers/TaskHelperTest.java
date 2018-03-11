@@ -44,12 +44,10 @@ public class TaskHelperTest {
         Task expectedTask = new Task(3, "Nice Question!", "with a name");
         when(mockedTaskDao.findById(user.getCurrentTaskId() + 1)).thenReturn(expectedTask);
 
-        Task nextTask = taskHelper.getNextTask(user);
-        assertNotNull(nextTask);
-        assertEquals(expectedTask, nextTask);
+        boolean hasNext = taskHelper.getNextTask(user);
+        assertTrue(hasNext);
 
         verify(mockedUserDao).updateTaskId(user.getId(), 3);
-        verify(mockedTaskDao).findById(3);
     }
 
     @Test
@@ -57,11 +55,10 @@ public class TaskHelperTest {
         User user = new User(UUID.randomUUID(), ParticipantType.NOHINT);
         user.setCurrentTaskId(maxTaskId); // just finished last task
 
-        Task nextTask = taskHelper.getNextTask(user);
-        assertNull(nextTask);
+        boolean hasNext = taskHelper.getNextTask(user);
+        assertFalse(hasNext);
 
         verify(mockedUserDao).updateTaskId(user.getId(), -1);
-        verify(mockedTaskDao, never()).findById(anyInt());
     }
 
     @Test
@@ -69,11 +66,10 @@ public class TaskHelperTest {
         User user = new User(UUID.randomUUID(), ParticipantType.NOHINT);
         user.setCurrentTaskId(-1); // experiment was already over
 
-        Task nextTask = taskHelper.getNextTask(user);
-        assertNull(nextTask);
+        boolean hasNext = taskHelper.getNextTask(user);
+        assertFalse(hasNext);
 
         verify(mockedUserDao, never()).updateTaskId(user.getId(), -1);
-        verify(mockedTaskDao, never()).findById(anyInt());
     }
 
     // TODO: Add test for url in task response

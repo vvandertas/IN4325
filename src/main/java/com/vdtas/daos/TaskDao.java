@@ -1,5 +1,6 @@
 package com.vdtas.daos;
 
+import com.vdtas.models.Keyword;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import com.vdtas.models.Task;
 import org.jdbi.v3.sqlobject.customizer.Bind;
@@ -7,6 +8,8 @@ import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
+
+import java.util.List;
 
 /**
  * @author vvandertas
@@ -35,10 +38,12 @@ public interface TaskDao {
 
 
     /**
-     * Find the
-     * @return
+     * Find all keywords for a task
+     *
+     * @param taskId the id of the task
+     * @return list of keywords
      */
-    @SqlQuery("SELECT MAX(id) FROM tasks GROUP BY id")
-    int findMaxId();
+    @SqlQuery("SELECT keyword FROM keywords WHERE task_id = :taskId")
+    List<String> findKeywordsForTask(@Bind("taskId") int taskId);
 
 }

@@ -1,6 +1,7 @@
 package integrationtests.testhelpers;
 
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -33,6 +34,12 @@ public class ExperimentsPage extends BasePage {
 
     @FindBy(id="url")
     private WebElement urlField;
+
+    @FindBy(id="experimentForm")
+    private WebElement experimentForm;
+
+    @FindBy(id="failureAlert")
+    private WebElement failureModal;
 
 
     @FindBy(name="searchQuery")
@@ -108,4 +115,35 @@ public class ExperimentsPage extends BasePage {
         WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOf(question));
     }
+
+    public void submitAnswer(String answer, boolean expectFailure) {
+        answerField.clear();
+        answerField.sendKeys(answer);
+        experimentForm.submit();
+
+        if(expectFailure) {
+            WebDriverWait wait = new WebDriverWait(driver, 10);
+            wait.until(ExpectedConditions.visibilityOf(failureModal));
+        }
+
+    }
+
+    public boolean failureModalVisible() {
+        return failureModal.isDisplayed();
+    }
+
+    public void closeFailureModal() {
+        failureModal.sendKeys(Keys.ESCAPE);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
+        wait.until(ExpectedConditions.invisibilityOf(failureModal));
+    }
+
+    public String getUrlAnswer() {
+        return urlField.getAttribute("value");
+    }
+
+    public String getTextAnswer() {
+        return answerField.getAttribute("value");
+    }
+
 }

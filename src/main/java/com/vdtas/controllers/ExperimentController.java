@@ -88,14 +88,16 @@ public class ExperimentController {
 
     @POST
     @Path("/validate")
-    public Result validateAnswer(TaskResponse taskResponse) {
-        Map<String, Object> result =  new HashMap<>();
+    public Result validateAnswer(@Body TaskResponse taskResponse, @Local User user) {
+        Map<String, Object> result = new HashMap<>();
         boolean success = false;
         String message = "";
 
-        Task task = taskHelper.findTask(taskResponse.getTaskIndex());
-
-        // TODO: validate url and answer text.
+        if(taskHelper.validateTask(taskResponse)) {
+            success = true;
+        } else {
+            message = "Unfortunately your answer is incorrect or incomplete. Please keep searching until you find the correct answer";
+        }
 
         result.put("success", success);
         result.put("message", message);

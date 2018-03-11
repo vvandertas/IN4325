@@ -1,19 +1,21 @@
 package com.vdtas.helpers;
 
+import com.google.common.collect.ImmutableList;
 import com.vdtas.daos.TaskDao;
 import com.vdtas.daos.UserDao;
+import com.vdtas.models.Keyword;
 import com.vdtas.models.Task;
+import com.vdtas.models.TaskResponse;
 import com.vdtas.models.User;
 import com.vdtas.models.participants.ParticipantType;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 import static com.vdtas.helpers.TaskHelper.maxTaskId;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -72,5 +74,38 @@ public class TaskHelperTest {
 
         verify(mockedUserDao, never()).updateTaskId(user.getId(), -1);
         verify(mockedTaskDao, never()).findById(anyInt());
+    }
+
+    // TODO: Add test for url in task response
+
+
+    /**
+     * Validate the text part of a task response
+     */
+    @Test
+    public void validateTaskResponse_correct() {
+        List<String> keywords = ImmutableList.of("keyword", "answer");
+        when(mockedTaskDao.findKeywordsForTask(1)).thenReturn(keywords);
+
+        TaskResponse taskResponse = new TaskResponse(1, "url", "The answer to this question is Keyword");
+        assertTrue(taskHelper.validateTask(taskResponse));
+    }
+
+    @Test
+    public void validateTaskResponse_incorrect() {
+        List<String> keywords = ImmutableList.of("keyword", "answer");
+        when(mockedTaskDao.findKeywordsForTask(1)).thenReturn(keywords);
+
+        TaskResponse taskResponse = new TaskResponse(1, "url", "I don't understand the question");
+        assertFalse(taskHelper.validateTask(taskResponse));
+    }
+
+    @Test
+    public void validateTaskResponse_incomplete() {
+        List<String> keywords = ImmutableList.of("keyword", "answer");
+        when(mockedTaskDao.findKeywordsForTask(1)).thenReturn(keywords);
+
+        TaskResponse taskResponse = new TaskResponse(1, "url", "Keyword");
+        assertFalse(taskHelper.validateTask(taskResponse));
     }
 }

@@ -17,6 +17,7 @@ $('document').ready(function () {
 
                 if (data.hasNext) {
                     showTaskInfo(data.task, data.hints);
+                    clearAnswerForm();
                 } else {
                     // TODO: Error or go to questionnaire
                     console.log("NO NEXT")
@@ -68,6 +69,11 @@ $('document').ready(function () {
         }
     }
 
+    function clearAnswerForm() {
+        $("#url").val("");
+        $("#answer").val("");
+    }
+
     $("#skip").on("click", function (e) {
         e.preventDefault();
 
@@ -90,12 +96,21 @@ $('document').ready(function () {
     function validate() {
         $.ajax({
             url: '/validate',
-            method: 'get',
-            data: $("#experimentForm").serialize(),
+            method: 'post',
+            data: JSON.stringify({text: $('#answer').val(), taskId: $('#taskId').val(), url: $('#url').val()}),
             contentType: 'application/json',
             dataType: 'json',
             success: function (data) {
                 console.log("Validated answer!");
+
+                if(data.success) {
+                    getNextQuestion();
+
+                } else {
+                    // TODO: Update modal and potential hard code message in the ftl file
+                    $("#failureAlert .modal-body p").html(data.message);
+                    $("#failureAlert").modal('show');
+                }
             },
             error: function (errorData) {
                 alert("error: " + errorData);

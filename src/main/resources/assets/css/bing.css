@@ -117,3 +117,9 @@ h3 a:visited {
 h3 a:link {
     color: #087 !important;
 }
+
+.btn-bing {
+    color: #fff !important;
+    background-color: #087 !important;
+    border-color: #087 !important;
+}

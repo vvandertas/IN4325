@@ -5,26 +5,29 @@
 </head>
 
 <body>
-    <div id="questionnaireDiv" class="col-md-8 container">
-        <form id="questionnaire" enctype="application/x-www-form-urlencoded" action="/questionnaire" method="post">
-            <div class="form-group row">
-                <label for="q1" class="col-sm-2 col-form-label">Question 1</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="q1">
+<div class="container" style="margin-top: 25px;">
+    <div class="row">
+        <div id="questionnaireDiv" class="offset-md-2 col-md-8">
+            <form id="questionnaire" enctype="application/x-www-form-urlencoded" action="/questionnaire" method="post">
+                <div class="form-group row">
+                    <label for="q1" class="col-sm-2 col-form-label">Question 1</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="q1">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <label for="url" class="col-sm-2 col-form-label">URL</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" id="url" name="url">
+                <div class="form-group row">
+                    <label for="url" class="col-sm-2 col-form-label">URL</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="url" name="url">
+                    </div>
                 </div>
-            </div>
 
-            <input type="hidden" name="taskId" id="taskId">
-            <a type="submit" class="btn btn-info">Submit</a>
-        </form>
-        <a href='#' id="skip" style="float:right">Skip</a>
+                <input type="hidden" name="taskId" id="taskId">
+                <a type="submit" class="btn btn-bing" style="float: right;">Submit</a>
+            </form>
+        </div>
     </div>
+</div>
 </body>
 </html>
 <#include "includes/scripts.ftl">

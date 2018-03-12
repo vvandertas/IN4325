@@ -1,4 +1,4 @@
-<div id="experiment" class="col-md-4 container" style="display: none">
+<div id="experiment" class="col-md-4 container" style="margin-top: 25px; display: none">
     <form id="experimentForm" enctype="application/x-www-form-urlencoded" action="/validate" method="post">
         <div class="form-group row">
             <label for="question" class="col-sm-2 col-form-label">Question</label>
@@ -27,7 +27,7 @@
         </div>
 
         <input type="hidden" name="taskId" id="taskId">
-        <button type="submit" class="btn btn-info">Submit</button>
+        <button type="submit" class="btn btn-bing">Submit</button>
     </form>
     <a href='#' id="skip" style="float:right">Skip</a>
 </div>

@@ -3,7 +3,6 @@ package com.vdtas.helpers;
 import com.google.common.collect.ImmutableList;
 import com.vdtas.daos.TaskDao;
 import com.vdtas.daos.UserDao;
-import com.vdtas.models.Keyword;
 import com.vdtas.models.Task;
 import com.vdtas.models.TaskResponse;
 import com.vdtas.models.User;
@@ -14,7 +13,6 @@ import org.junit.Test;
 import java.util.List;
 import java.util.UUID;
 
-import static com.vdtas.helpers.TaskHelper.maxTaskId;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
@@ -22,7 +20,7 @@ import static org.mockito.Mockito.*;
  * @author vvandertas
  */
 public class TaskHelperTest {
-
+    private int taskCount = 2;
 
     private TaskDao mockedTaskDao;
     private UserDao mockedUserDao;
@@ -53,7 +51,7 @@ public class TaskHelperTest {
     @Test
     public void nextTaskTest_noRemainingTasks() throws Exception {
         User user = new User(UUID.randomUUID(), ParticipantType.NOHINT);
-        user.setCurrentTaskId(maxTaskId); // just finished last task
+        user.setCurrentTaskId(taskCount); // just finished last task
 
         boolean hasNext = taskHelper.getNextTask(user);
         assertFalse(hasNext);

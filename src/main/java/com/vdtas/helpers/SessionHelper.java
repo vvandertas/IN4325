@@ -17,9 +17,10 @@ import java.util.*;
  */
 public class SessionHelper {
     private static final Logger logger = LoggerFactory.getLogger(SessionHelper.class);
-    protected static final String USER_ID = "userId";
+    public static final String USER_ID = "userId";
+
     private final String env;
-    protected final UserDao userDao;
+    private final UserDao userDao;
 
     @Inject
     public SessionHelper(@Named("application.env") String env, UserDao userDao) {
@@ -27,28 +28,36 @@ public class SessionHelper {
         this.userDao = userDao;
     }
 
-    public User findOrCreateUser(Session session, Optional<String> forceType) {
+    /**
+     * Find or create a user using the userId from the session
+     *
+     * @param session Jooby session
+     * @param forceType optional get parameter used for testing
+     *
+     * @return boolean indicating whether or not a new user was created
+     */
+    public boolean findOrCreateUser(Session session, Optional<String> forceType) {
         UUID userId = findOrCreateUserId(session, forceType);
 
+        boolean createdNewUser = false;
         User user = userDao.findById(userId);
         if (user == null) {
             logger.info("User does not exist yet, creating one.");
 
+            createdNewUser = true;
             // Create new user and assign a participant type.
             ParticipantType participantType = selectParticipantType(forceType);
-            user = userDao.insert(userId, participantType.toString());
-
-            // TODO: Insert initial UserTaskData object
+            userDao.insert(userId, participantType.toString());
         }
 
-        return user;
+        return createdNewUser;
     }
 
     /**
      * Check if we already have a session id for the user. If not create one.
      *
-     * @param session
-     * @return
+     * @param session current Jooby session
+     * @return a user id
      */
     protected UUID findOrCreateUserId(Session session, Optional<String> forceType) {
         if (!session.get(USER_ID).isSet() || ("test".equals(env) && forceType.isPresent())) {
@@ -62,13 +71,19 @@ public class SessionHelper {
     }
 
 
+    /**
+     * Select the next participant type based on the current counts per type.
+     * If there are multiple types with the lowest count one is selected randomly from those.
+     *
+     * @param forceType testing parameter
+     * @return the selected participant type
+     */
     public synchronized ParticipantType selectParticipantType(Optional<String> forceType) {
         if("test".equals(env) && forceType.isPresent()) {
             return ParticipantType.valueOf(forceType.get());
         }
 
         Map<String, Integer> counts = userDao.getParticipantCounts();
-        logger.debug("COUNTS: " + counts);
 
         List<Participant> participants = new ArrayList<>();
         ParticipantType[] types = ParticipantType.values();
@@ -85,8 +100,18 @@ public class SessionHelper {
         Participant selectedParticipant = Participant.randomMin(participants);
         logger.debug("Selected participant type: " + selectedParticipant.toString());
 
-
         return selectedParticipant.getParticipantType();
+    }
+
+    /**
+     * Register the end of the experiment for a user
+     *
+     * @param user current user
+     */
+    public void registerEndOfExperiment(User user) {
+        if(user.getFinishedAt() == null) {
+            userDao.setFinished(user.getId());
+        }
     }
 
 }

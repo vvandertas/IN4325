@@ -14,13 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.vdtas.helpers.Routes.*;
+import static com.vdtas.helpers.SessionHelper.USER_ID;
 
 
 /**
@@ -41,8 +39,6 @@ public class ExperimentController {
         this.sessionHelper = sessionHelper;
     }
 
-    // TODO: Make sure we always have task data, even though user skipped without querying.
-
     /**
      * Show the landing page
      */
@@ -56,7 +52,12 @@ public class ExperimentController {
     @Path(EXPERIMENT)
     public Result start(Session session, Optional<String> forceType) {
         // Make sure a userId in the current session and an accompanying user
-        sessionHelper.findOrCreateUser(session, forceType);
+        boolean createdUser = sessionHelper.findOrCreateUser(session, forceType);
+
+        // Make sure we always have task data, even though user skipped without querying.
+        if(createdUser) {
+            experimentHelper.createUserTaskData(UUID.fromString(session.get(USER_ID).value()), 1);
+        }
         return Results.html("bing");
     }
 
@@ -72,7 +73,6 @@ public class ExperimentController {
 
         // This user is done with the experiment
         if(task == null) {
-            // TODO: Redirect to showQuestionnaire instead
             return Results.json(ImmutableMap.of("task", "null"));
         }
 
@@ -93,7 +93,10 @@ public class ExperimentController {
         boolean hasNext = taskHelper.getNextTask(user);
         Map<String, Object> results = ImmutableMap.of("hasNext",hasNext);
 
-        // TODO: Insert initial UserTaskData object
+        // Insert new object to capture data for next task.
+        if(hasNext) {
+            experimentHelper.createUserTaskData(user);
+        }
 
         return Results.json(results);
     }
@@ -112,8 +115,15 @@ public class ExperimentController {
         boolean success = false;
         String message = "";
 
+        // increment number of attempts for this task
+        experimentHelper.incrementAttempts(user);
+
+        // and validate the answer
         if(taskHelper.validateTask(taskResponse)) {
             success = true;
+
+            // register the end of this task for the user
+            experimentHelper.logAnswerFound(user);
         } else {
             message = "Unfortunately your answer is incorrect or incomplete. Please keep searching until you find the correct answer";
         }
@@ -145,6 +155,9 @@ public class ExperimentController {
     @GET
     @Path(QUESTIONNAIRE)
     public Result showQuestionnaire(@Local User user) {
+        logger.debug("Getting questionnaire");
+        sessionHelper.registerEndOfExperiment(user); // TODO: Possible do this after finishing questionnaire.
+
         return Results.html("questionnaire"); // TODO: Populate
     }
 

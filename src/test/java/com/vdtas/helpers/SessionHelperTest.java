@@ -12,9 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.vdtas.helpers.SessionHelper.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.*;
@@ -79,8 +77,8 @@ public class SessionHelperTest {
         UUID userId = mockUserSession(false);
         when(mockedUserDao.insert(eq(userId), any())).thenReturn(new User(userId, ParticipantType.NOHINT));
 
-        User user = sessionHelper.findOrCreateUser(mockedSession, Optional.empty());
-        assertNotNull(user);
+        boolean createdUser = sessionHelper.findOrCreateUser(mockedSession, Optional.empty());
+        assertTrue(createdUser);
         verify(mockedUserDao).findById(userId);
         verify(mockedUserDao).insert(eq(userId), any());
     }
@@ -100,11 +98,12 @@ public class SessionHelperTest {
 
         when(mockedUserDao.findById(existingId)).thenReturn(user);
 
-        User foundUser = sessionHelper.findOrCreateUser(mockedSession, Optional.empty());
-        assertNotNull(foundUser);
-        assertEquals(user, foundUser);
-    }
+        boolean createdUser = sessionHelper.findOrCreateUser(mockedSession, Optional.empty());
+        assertFalse(createdUser);
+        verify(mockedUserDao).findById(existingId);
+        verify(mockedUserDao, never()).insert(eq(existingId), any());
 
+    }
 
 
     /**

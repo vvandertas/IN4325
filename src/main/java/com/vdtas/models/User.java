@@ -2,6 +2,7 @@ package com.vdtas.models;
 
 import com.vdtas.models.participants.ParticipantType;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 /**
@@ -11,6 +12,8 @@ public class User {
     private UUID id;
     private ParticipantType participantType;
     private int currentTaskId = 1; // always start at task 1
+
+    private Timestamp finishedAt;
 
     public User() {
     }
@@ -44,12 +47,21 @@ public class User {
         this.currentTaskId = currentTaskId;
     }
 
+    public Timestamp getFinishedAt() {
+        return finishedAt;
+    }
+
+    public void setFinishedAt(Timestamp finishedAt) {
+        this.finishedAt = finishedAt;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", participantType=" + participantType +
                 ", currentTaskId=" + currentTaskId +
+                ", finishedAt=" + finishedAt +
                 '}';
     }
 }

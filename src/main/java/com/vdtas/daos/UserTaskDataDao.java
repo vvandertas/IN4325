@@ -20,9 +20,9 @@ public interface UserTaskDataDao {
      *
      * @param userId user id
      * @param taskId task id
-     * @return
+     * @return true on success
      */
-    @SqlUpdate("UPDATE user_task_data SET query_count = query_count +1 WHERE user_id=:userId and task_id=:taskId;")
+    @SqlUpdate("UPDATE user_task_data SET query_count = query_count +1 WHERE user_id=:userId AND task_id=:taskId;")
     boolean incrementQueryCount(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
 
 
@@ -31,26 +31,45 @@ public interface UserTaskDataDao {
      *
      * @param userId user id
      * @param taskId task id
-     * @return
      */
-    @SqlUpdate("UPDATE user_task_data SET  attempts = attempts +1 where user_id=:userId and task_id=:taskId;")
-    boolean incrementAttempts(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
+    @SqlUpdate("UPDATE user_task_data SET  attempts = attempts +1 WHERE user_id=:userId AND task_id=:taskId;")
+    void incrementAttempts(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
 
 
     /**
      * Insert new userTaskData entry
      *
-     * @param userTaskData
-     * @return
+     * @param userTaskData the object to insert
+     * @return true on success
      */
     @SqlUpdate("INSERT INTO user_task_data (user_id, task_id) VALUES(:userId, :taskId);")
-    boolean insert(@BindBean UserTaskData userTaskData);
+    void insert(@BindBean UserTaskData userTaskData);
 
+    /**
+     * Find UserTaskData through user id and task id
+     *
+     * @param userId user id
+     * @param taskId task id
+     */
     @SqlQuery("SELECT * FROM user_task_data WHERE user_id=:userId AND task_id = :taskId;")
     @RegisterBeanMapper(UserTaskData.class)
     UserTaskData findByUserAndTask(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
 
+    /**
+     * Register a correct answer
+     *
+     * @param userId user id
+     * @param taskId task id
+     */
+    @SqlUpdate("UPDATE user_task_data SET answer_found = TRUE, finished_at = NOW() WHERE user_id = :userId AND task_id = :taskId;")
+    void registerEndOfTask(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
+
+
+    /**
+     * Register a link click for a task for a specific user
+     * @param clickCapture wrapper containing all info needed to log a link click
+     */
     @SqlUpdate("INSERT INTO visited_urls (user_id, task_id, url) VALUES(:userId, :taskId, :url);")
-    boolean captureUrlClick(@BindBean ClickCapture clickCapture);
+    void captureUrlClick(@BindBean ClickCapture clickCapture);
 
 }

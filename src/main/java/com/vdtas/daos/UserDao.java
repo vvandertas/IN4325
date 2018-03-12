@@ -46,11 +46,31 @@ public interface UserDao {
     @RegisterBeanMapper(User.class)
     List<User> listUsers();
 
+
+    /**
+     * Update the current task id for a user
+     *
+     * @param userId the user's id
+     * @param taskId the new task id
+     */
     @SqlUpdate("UPDATE users SET current_task_id=:taskId WHERE id=:userId;")
     void updateTaskId(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
 
 
+    /**
+     * Find the current number of participants for each participant count
+     *
+     * @return a mapping from participantType to count
+     */
     @SqlQuery("SELECT COUNT(u.participant_type) FROM users u GROUP BY participant_type;")
     @RegisterBeanMapper(Participant.class)
     Map<String, Integer> getParticipantCounts();
+
+    /**
+     * Updated the finished_at time for a user
+     *
+     * @param userId the user's id
+     */
+    @SqlUpdate("UPDATE users SET finished_at = NOW() WHERE id = :userId;")
+    void setFinished(@Bind("userId") UUID userId);
 }

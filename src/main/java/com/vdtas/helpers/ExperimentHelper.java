@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static com.vdtas.models.Task.GENERIC_HINT;
 
@@ -52,7 +53,6 @@ public class ExperimentHelper {
 
     }
 
-
     /**
      * Retrieve the correct hint from the current task for a user session.
      *
@@ -85,5 +85,18 @@ public class ExperimentHelper {
 
     public void captureClick(ClickCapture clickCapture) {
         dataDao.captureUrlClick(clickCapture);
+    }
+
+
+    public void createUserTaskData(User user) {
+        dataDao.insert(new UserTaskData(user.getId(), user.getCurrentTaskId()));
+    }
+
+    public void createUserTaskData(UUID userId, int taskId) {
+        dataDao.insert(new UserTaskData(userId, taskId));
+    }
+
+    public void logAnswerFound(User user) {
+        dataDao.registerEndOfTask(user.getId(), user.getCurrentTaskId());
     }
 }

@@ -85,7 +85,11 @@ $('document').ready(function () {
     $("#experimentForm").submit(function (e) {
         e.preventDefault();
 
-        validate()
+        // only validate if there is data
+        if($("#answer").val() !== "") {
+            validate();
+        }
+
     });
 
     function nextTask() {
@@ -99,7 +103,9 @@ $('document').ready(function () {
                 if(data.hasNext) {
                     getTaskData();
                 } else {
-                    // TODO: Redirect to questionnaire
+                    // Redirect to questionnaire
+                    window.location.replace("/questionnaire");
+
                 }
             },
             error: function (errorData) {

@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
  * @author vvandertas
  */
 public class TaskHelper {
-    protected static final int maxTaskId = 4; // TODO: Verify
 
     private TaskDao taskDao;
     private UserDao userDao;
@@ -39,12 +38,14 @@ public class TaskHelper {
         boolean hasNext = false;
         int currentTaskId = user.getCurrentTaskId();
 
-        if(1 <= currentTaskId  && currentTaskId < maxTaskId) {
+        Task nextTask = taskDao.findById(currentTaskId + 1);
+
+        if(nextTask != null) {
             hasNext = true;
             user.setCurrentTaskId(++currentTaskId);
             userDao.updateTaskId(user.getId(), currentTaskId);
 
-        } else if (currentTaskId >= maxTaskId) {
+        } else if (currentTaskId != -1) {
             user.setCurrentTaskId(-1);
             userDao.updateTaskId(user.getId(), user.getCurrentTaskId());
         }

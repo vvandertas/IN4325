@@ -1,2 +1,3 @@
-INSERT INTO tasks(name, question) VALUES('Task 1', 'This is a temporary question'), ('Task 2', 'This is another placeholder question');
-INSERT INTO hints(task_id, hint) VALUES(1, 'This is a very special first placeholder hint'), (1, 'Together with another placeholder hint for this task'),(2,'A lonesome placeholder hint for this task');
+INSERT INTO tasks(name, question) VALUES('Task 1', 'This is a temporary question'), ('Task 2', 'This is another placeholder question'),('Task 3', 'What is the question?'),('Task 4', 'This is the final question');
+INSERT INTO hints(task_id, hint) VALUES(1, 'This is a very special first placeholder hint'), (1, 'Together with another placeholder hint for this task'),(2,'A lonesome placeholder hint for this task'), (3,'Hinttttt it'), (4,'Yes. Our final hint of today!');
+INSERT INTO keywords(task_id, keyword) VALUES(1,'atlas'),(1,'mercury');

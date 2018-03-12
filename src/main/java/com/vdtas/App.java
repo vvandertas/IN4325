@@ -49,6 +49,7 @@ public class App extends Jooby {
                                 .attach(TaskDao.class)
                                 .attach(UserTaskDataDao.class)
                                 .attach(HintDao.class)
+                                .attach(CacheDao.class)
                 )
         );
 

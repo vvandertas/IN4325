@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.net.ssl.HttpsURLConnection;
 
+import com.vdtas.daos.CacheDao;
 import com.vdtas.helpers.ExperimentHelper;
 import com.vdtas.models.search.SearchParameters;
 import com.vdtas.models.search.SearchResults;
@@ -34,11 +35,13 @@ public class BingSearch {
     private static final String BING_ENDPOINT = "https://api.cognitive.microsoft.com/bing/v7.0/search";
     private final Logger logger = LoggerFactory.getLogger(BingSearch.class);
     private ExperimentHelper experimentHelper;
+    private final CacheDao cacheDao;
 
     @Inject
-    public BingSearch(@Named("bing.apiKey") String apiKey, ExperimentHelper experimentHelper) {
+    public BingSearch(@Named("bing.apiKey") String apiKey, ExperimentHelper experimentHelper, CacheDao cacheDao) {
         subscriptionKey = apiKey;
         this.experimentHelper = experimentHelper;
+        this.cacheDao = cacheDao;
     }
 
     @GET
@@ -51,7 +54,13 @@ public class BingSearch {
         logger.info("Received request");
 
         try {
-            result = searchWeb(searchParameters);
+            String cachedResult = cacheDao.getResultsBySearchParam(searchParameters);
+            if(cachedResult != null) {
+                result.jsonResponse = cachedResult;
+            } else {
+                result = searchWeb(searchParameters);
+                cacheDao.insertCache(result.jsonResponse, searchParameters.getOffset(), searchParameters.getCount(), searchParameters.getSearchQuery());
+            }
 
         } catch (Exception e) {
             logger.error("An error occurred while processing search request", e);

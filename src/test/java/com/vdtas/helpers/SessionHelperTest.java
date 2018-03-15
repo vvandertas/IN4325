@@ -1,13 +1,18 @@
 package com.vdtas.helpers;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.vdtas.daos.UserDao;
 import com.vdtas.models.User;
 import com.vdtas.models.participants.ParticipantType;
+import org.jdbi.v3.core.Jdbi;
 import org.jooby.Session;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,11 +31,13 @@ public class SessionHelperTest {
     private Session mockedSession;
     private SessionHelper sessionHelper;
     private UserDao mockedUserDao;
+    private Jdbi mockedJdbi;
 
     @Before
     public void setup() {
         mockedUserDao = mock(UserDao.class);
         mockedSession = mock(Session.class, Mockito.RETURNS_DEEP_STUBS);
+        mockedJdbi = mock(Jdbi.class);
 
         sessionHelper = new SessionHelper("unitTest", mockedUserDao);
     }
@@ -102,6 +109,22 @@ public class SessionHelperTest {
         assertFalse(createdUser);
         verify(mockedUserDao).findById(existingId);
         verify(mockedUserDao, never()).insert(eq(existingId), any());
+
+    }
+
+
+    @Test
+    public void questionnaireTest() throws Exception {
+        UUID existingId = mockUserSession(true);
+
+        User user = new User();
+        user.setId(existingId);
+        user.setParticipantType(ParticipantType.GENERICHINT);
+
+        Map<String, String> answers = ImmutableMap.of("Q1", "Answer 1","Q2", "Answer 2");
+        sessionHelper.saveQuestionnaireData(user, answers);
+        sessionHelper.findOrCreateUser(mockedSession, Optional.empty());
+
 
     }
 

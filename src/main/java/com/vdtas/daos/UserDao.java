@@ -4,6 +4,7 @@ import com.vdtas.models.User;
 import com.vdtas.models.participants.Participant;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.customizer.BindList;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
  * @author vvandertas
  */
 public interface UserDao {
+
 
     /**
      * Insert new user
@@ -73,4 +75,8 @@ public interface UserDao {
      */
     @SqlUpdate("UPDATE users SET finished_at = NOW() WHERE id = :userId;")
     void setFinished(@Bind("userId") UUID userId);
+
+    @SqlUpdate("UPDATE users SET questionnaire = :q WHERE id = :userId;")
+    void setQuestionnaire(@Bind("userId") UUID userId, @Bind("q") Map<String, String> answers);
+
 }

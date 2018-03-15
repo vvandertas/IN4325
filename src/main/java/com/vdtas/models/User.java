@@ -3,6 +3,8 @@ package com.vdtas.models;
 import com.vdtas.models.participants.ParticipantType;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -14,6 +16,7 @@ public class User {
     private int currentTaskId = 1; // always start at task 1
 
     private Timestamp finishedAt;
+    private Map<String, String> questionnaire; // json blob
 
     public User() {
     }
@@ -53,6 +56,14 @@ public class User {
 
     public void setFinishedAt(Timestamp finishedAt) {
         this.finishedAt = finishedAt;
+    }
+
+    public Map<String, String> getQuestionnaire() {
+        return questionnaire;
+    }
+
+    public void setQuestionnaire(Map<String, String>  questionnaire) {
+        this.questionnaire = questionnaire;
     }
 
     @Override

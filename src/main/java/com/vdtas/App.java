@@ -3,8 +3,8 @@ package com.vdtas;
 import com.vdtas.controllers.BingSearch;
 import com.vdtas.controllers.ExperimentController;
 import com.vdtas.daos.*;
-import com.vdtas.helpers.PostgresSessionStore;
 import com.vdtas.models.User;
+import org.jdbi.v3.postgres.PostgresPlugin;
 import org.jdbi.v3.sqlobject.SqlObjectPlugin;
 import org.jooby.Jooby;
 import org.jooby.flyway.Flywaydb;
@@ -18,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
+
+import static com.vdtas.helpers.Routes.EXPERIMENT;
 
 /**
  * @author vvandertas
@@ -40,11 +42,11 @@ public class App extends Jooby {
                 // Install SqlObjectPlugin
                 .doWith(jdbi -> {
                     jdbi.installPlugin(new SqlObjectPlugin());
+                    jdbi.installPlugin(new PostgresPlugin());
                 })
                 // Create a transaction per request and attach all dao's
                 .transactionPerRequest(
                         new TransactionalRequest()
-                                .attach(SessionDao.class)
                                 .attach(UserDao.class)
                                 .attach(TaskDao.class)
                                 .attach(UserTaskDataDao.class)
@@ -53,8 +55,9 @@ public class App extends Jooby {
                 )
         );
 
+
         before((req, rsp) -> {
-            if (!req.path().equals("/") && !req.path().equals("/experiment")) {
+            if (!req.path().equals("/") && !req.path().equals(EXPERIMENT)) {
                 logger.debug("Finding user for path " + req.path());
                 if (req.session().isSet("userId")) {
                     UserDao userDao = req.require(UserDao.class);
@@ -70,9 +73,6 @@ public class App extends Jooby {
                 }
             }
         });
-
-        // allowing automatic storage of sessions
-        session(PostgresSessionStore.class);
 
         // Jooby gson
         use(new Gzon());
@@ -90,9 +90,6 @@ public class App extends Jooby {
         // MVC routing
         use(ExperimentController.class);
         use(BingSearch.class);
-
-        //TODO: Add selenium test
-
     }
 
     public static void main(final String[] args) {

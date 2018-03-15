@@ -1,5 +1,6 @@
 package com.vdtas.controllers;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.vdtas.helpers.ExperimentHelper;
 import com.vdtas.helpers.SessionHelper;
@@ -58,6 +59,7 @@ public class ExperimentController {
         if(createdUser) {
             experimentHelper.createUserTaskData(UUID.fromString(session.get(USER_ID).value()), 1);
         }
+
         return Results.html("bing");
     }
 
@@ -163,7 +165,7 @@ public class ExperimentController {
 
     @POST
     @Path(QUESTIONNAIRE)
-    public Result saveAnswers(@Local User user) {
+    public Result saveAnswers(List<String> answers, @Local User user) {
         // TODO: store showQuestionnaire submission in users table as json
         return Results.ok();
     }

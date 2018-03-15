@@ -22,7 +22,6 @@
                     </div>
                 </div>
 
-                <input type="hidden" name="taskId" id="taskId">
                 <a type="submit" class="btn btn-bing" style="float: right;">Submit</a>
             </form>
         </div>

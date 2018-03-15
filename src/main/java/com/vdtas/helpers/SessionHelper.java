@@ -4,6 +4,7 @@ import com.vdtas.daos.UserDao;
 import com.vdtas.models.User;
 import com.vdtas.models.participants.Participant;
 import com.vdtas.models.participants.ParticipantType;
+import org.jdbi.v3.core.Jdbi;
 import org.jooby.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,6 +113,14 @@ public class SessionHelper {
         if(user.getFinishedAt() == null) {
             userDao.setFinished(user.getId());
         }
+    }
+
+    public void saveQuestionnaireData(User user, Map<String, String> questionnaire) {
+        userDao.setQuestionnaire(user.getId(), questionnaire);
+    }
+
+    public User findUser(UUID userId) {
+        return userDao.findById(userId);
     }
 
 }

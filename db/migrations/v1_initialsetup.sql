@@ -1,21 +1,9 @@
-CREATE EXTENSION IF NOT EXISTS hstore;
-
-CREATE TABLE sessions (
-  id          VARCHAR(255) PRIMARY KEY,
-  created_at  TIMESTAMP NOT NULL DEFAULT now(),
-  accessed_at TIMESTAMP NOT NULL DEFAULT now(),
-  saved_at    TIMESTAMP NOT NULL DEFAULT now(),
-  expiry_at   TIMESTAMP NOT NULL DEFAULT now() + INTERVAL '30 days',
-  attributes  HSTORE    NOT NULL DEFAULT ''
-);
-
 CREATE TABLE users (
   id               UUID PRIMARY KEY,
   participant_type VARCHAR(100) NOT NULL,
   created_at       TIMESTAMP    NOT NULL DEFAULT now(),
   current_task_id INT NOT NULL DEFAULT 1
 );
-
 
 CREATE TABLE tasks (
   id       SERIAL PRIMARY KEY,

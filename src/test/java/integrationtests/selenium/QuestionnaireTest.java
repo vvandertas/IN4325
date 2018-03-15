@@ -27,6 +27,11 @@ public class QuestionnaireTest extends SeleniumTest{
         ePage.open(ParticipantType.NOHINT.toString());
 
         qPage.open();
+
+        qPage.populateAnswers();
+
+        qPage.submitForm();
+
     }
 
 

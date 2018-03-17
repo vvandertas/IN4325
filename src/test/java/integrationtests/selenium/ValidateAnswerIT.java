@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 /**
  * @author vvandertas
  */
-public class ValidateAnswerTest extends SeleniumTest {
+public class ValidateAnswerIT extends SeleniumTest {
 
     private ExperimentsPage experimentsPage;
 
@@ -59,6 +59,4 @@ public class ValidateAnswerTest extends SeleniumTest {
         assertTrue(StringUtils.isEmpty(experimentsPage.getUrlAnswer()));
 
     }
-
-
 }

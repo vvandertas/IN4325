@@ -9,7 +9,7 @@ import integrationtests.testhelpers.SeleniumTest;
 /**
  * @author vvandertas
  */
-public class LandingTest extends SeleniumTest{
+public class LandingIT extends SeleniumTest{
     LandingPage landingPage;
     @Before
     public void setup() {

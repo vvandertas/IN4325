@@ -1,6 +1,7 @@
 package integrationtests.selenium;
 
 import static com.vdtas.models.Task.GENERIC_HINT;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
 import com.vdtas.models.participants.ParticipantType;
@@ -12,7 +13,7 @@ import integrationtests.testhelpers.SeleniumTest;
 /**
  * @author vvandertas
  */
-public class ExperimentTest extends SeleniumTest {
+public class ExperimentIT extends SeleniumTest {
 
     ExperimentsPage experimentsPage;
 

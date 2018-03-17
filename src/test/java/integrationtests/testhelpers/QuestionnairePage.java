@@ -19,8 +19,26 @@ public class QuestionnairePage extends BasePage {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(css="input[type='text]")
-    private List<WebElement> inputFields;
+    @FindBy(className="form-group")
+    private List<WebElement> formGroups;
+
+    @FindBy(id="likeabilityQuestion")
+    private WebElement likeabilityQuestionDiv;
+
+    @FindBy(css=".likeabilityRow label")
+    private List<WebElement> likeabilityButtons;
+
+    @FindBy(id="difficultyQuestion")
+    private WebElement difficultyQuestionDiv;
+
+    @FindBy(css=".difficultyRow label")
+    private List<WebElement> difficultyButtons;
+
+    @FindBy(id="usefulnessQuestion")
+    private WebElement hintsQuestionDiv;
+
+    @FindBy(css=".usefulnessRow label")
+    private List<WebElement> usefulnessButtons;
 
     @FindBy(id="questionnaire")
     private WebElement form;
@@ -29,14 +47,32 @@ public class QuestionnairePage extends BasePage {
         get(Routes.QUESTIONNAIRE);
     }
 
+    public boolean hintsQuestionIsDisplayed() {
+        return hintsQuestionDiv == null;
+    }
+
+    public int questionsDisplayed() {
+        int count =0;
+        for (WebElement group : formGroups) {
+            if (group.isDisplayed()) {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
     public void populateAnswers() {
-        inputFields.forEach(field -> {
-            field.sendKeys("This is an answer");
-        });
+        likeabilityButtons.get(2).click();
+        difficultyButtons.get(3).click();
+        if(hintsQuestionDiv.isDisplayed()) {
+            usefulnessButtons.get(4).click();
+        }
     }
 
     public void submitForm() {
         form.submit();
+        waitForAjax();
     }
 
 }

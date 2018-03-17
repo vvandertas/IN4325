@@ -160,13 +160,14 @@ public class ExperimentController {
         logger.debug("Getting questionnaire");
         sessionHelper.registerEndOfExperiment(user); // TODO: Possible do this after finishing questionnaire.
 
-        return Results.html("questionnaire"); // TODO: Populate
+        return Results.html("questionnaire").put("participantType", user.getParticipantType().toString());
     }
 
     @POST
     @Path(QUESTIONNAIRE)
-    public Result saveAnswers(List<String> answers, @Local User user) {
-        // TODO: store showQuestionnaire submission in users table as json
-        return Results.ok();
+    public Result saveAnswers(@Body Map<String, String> answers, @Local User user) {
+        sessionHelper.saveQuestionnaireData(user, answers);
+
+        return Results.json(ImmutableMap.of("success", true));
     }
 }

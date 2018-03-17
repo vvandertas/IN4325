@@ -41,7 +41,7 @@ public class SeleniumTest extends IntegrationTest{
     public static void seleniumShutdown() {
         // comment to leave Chrome windows open
         if(driver != null) {
-//            driver.quit();
+            driver.quit();
         }
     }
 }

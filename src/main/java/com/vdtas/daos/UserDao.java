@@ -26,7 +26,7 @@ public interface UserDao {
      */
     @SqlQuery("INSERT INTO users(id, participant_type) VALUES (:id, :participantType) RETURNING *;")
     @RegisterBeanMapper(User.class)
-    User insert(@Bind("id") UUID id, @Bind("participantType") String participantType);
+    User insert(UUID id, String participantType);
 
     /**
      * Find user by id
@@ -36,7 +36,7 @@ public interface UserDao {
      */
     @SqlQuery("SELECT * FROM users where id=:id;")
     @RegisterBeanMapper(User.class)
-    User findById(@Bind("id") UUID id);
+    User findById(UUID id);
 
 
     /**
@@ -56,7 +56,7 @@ public interface UserDao {
      * @param taskId the new task id
      */
     @SqlUpdate("UPDATE users SET current_task_id=:taskId WHERE id=:userId;")
-    void updateTaskId(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
+    void updateTaskId(UUID userId, int taskId);
 
 
     /**
@@ -74,9 +74,15 @@ public interface UserDao {
      * @param userId the user's id
      */
     @SqlUpdate("UPDATE users SET finished_at = NOW() WHERE id = :userId;")
-    void setFinished(@Bind("userId") UUID userId);
+    void setFinished(UUID userId);
 
+    /**
+     * Update the user entry by setting the questionnaire response
+     *
+     * @param userId
+     * @param answers
+     */
     @SqlUpdate("UPDATE users SET questionnaire = :q WHERE id = :userId;")
-    void setQuestionnaire(@Bind("userId") UUID userId, @Bind("q") Map<String, String> answers);
+    void setQuestionnaire(UUID userId, @Bind("q") Map<String, String> answers);
 
 }

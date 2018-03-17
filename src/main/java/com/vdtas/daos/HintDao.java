@@ -13,8 +13,6 @@ import java.util.List;
  * @author vvandertas
  */
 public interface HintDao {
-
-
     /**
      * Insert new hint
      *
@@ -24,7 +22,7 @@ public interface HintDao {
     void insertBean(@BindBean Hint hint);
 
     @SqlUpdate("INSERT INTO hints(task_id, hint) VALUES(:taskId, :hint)")
-    void insert(@Bind("taskId") int taskId, @Bind("hint") String hint);
+    void insert(int taskId, String hint);
 
 
     /**
@@ -35,7 +33,7 @@ public interface HintDao {
      */
     @SqlQuery("SELECT * FROM hints WHERE id=:id")
     @RegisterBeanMapper(Hint.class)
-    Hint findById(@Bind("id") int id);
+    Hint findById(int id);
 
 
     /**
@@ -45,7 +43,5 @@ public interface HintDao {
      */
     @SqlQuery("SELECT * FROM hints WHERE task_id=:taskId ORDER BY id ASC")
     @RegisterBeanMapper(Hint.class)
-    List<Hint> findByTaskId(@Bind("taskId") int taskId);
-
-
+    List<Hint> findByTaskId(int taskId);
 }

@@ -3,7 +3,6 @@ package com.vdtas.daos;
 import com.vdtas.models.ClickCapture;
 import com.vdtas.models.UserTaskData;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
-import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
@@ -23,7 +22,7 @@ public interface UserTaskDataDao {
      * @return true on success
      */
     @SqlUpdate("UPDATE user_task_data SET query_count = query_count +1 WHERE user_id=:userId AND task_id=:taskId;")
-    boolean incrementQueryCount(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
+    boolean incrementQueryCount(UUID userId, int taskId);
 
 
     /**
@@ -33,7 +32,7 @@ public interface UserTaskDataDao {
      * @param taskId task id
      */
     @SqlUpdate("UPDATE user_task_data SET  attempts = attempts +1 WHERE user_id=:userId AND task_id=:taskId;")
-    void incrementAttempts(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
+    void incrementAttempts(UUID userId, int taskId);
 
 
     /**
@@ -53,7 +52,7 @@ public interface UserTaskDataDao {
      */
     @SqlQuery("SELECT * FROM user_task_data WHERE user_id=:userId AND task_id = :taskId;")
     @RegisterBeanMapper(UserTaskData.class)
-    UserTaskData findByUserAndTask(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
+    UserTaskData findByUserAndTask(UUID userId, int taskId);
 
     /**
      * Register a correct answer
@@ -62,7 +61,7 @@ public interface UserTaskDataDao {
      * @param taskId task id
      */
     @SqlUpdate("UPDATE user_task_data SET answer_found = TRUE, finished_at = NOW() WHERE user_id = :userId AND task_id = :taskId;")
-    void registerEndOfTask(@Bind("userId") UUID userId, @Bind("taskId") int taskId);
+    void registerEndOfTask(UUID userId, int taskId);
 
 
     /**

@@ -1,9 +1,7 @@
 package com.vdtas.daos;
 
-import com.vdtas.models.Keyword;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
 import com.vdtas.models.Task;
-import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.GetGeneratedKeys;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
@@ -24,7 +22,7 @@ public interface TaskDao {
      */
     @SqlQuery("SELECT * FROM tasks WHERE id=:id")
     @RegisterBeanMapper(Task.class)
-    Task findById(@Bind("id") int id);
+    Task findById(int id);
 
     /**
      * Insert a task and returns the generated PK.
@@ -44,6 +42,6 @@ public interface TaskDao {
      * @return list of keywords
      */
     @SqlQuery("SELECT keyword FROM keywords WHERE task_id = :taskId")
-    List<String> findKeywordsForTask(@Bind("taskId") int taskId);
+    List<String> findKeywordsForTask(int taskId);
 
 }

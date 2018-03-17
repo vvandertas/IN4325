@@ -7,6 +7,7 @@ import org.jdbi.v3.sqlobject.customizer.BindBean;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -70,5 +71,14 @@ public interface UserTaskDataDao {
      */
     @SqlUpdate("INSERT INTO visited_urls (user_id, task_id, url) VALUES(:userId, :taskId, :url);")
     void captureUrlClick(@BindBean ClickCapture clickCapture);
+
+    /**
+     * Find all visited pages for a user
+     *
+     * @param userId user id
+     * @return List of ClickCaptures representing visited pages + task
+     */
+    @SqlQuery("SELECT url FROM visited_urls WHERE user_id= :userId AND task_id = :taskId;")
+    List<String> findAllPagesForUserTask(UUID userId, int taskId);
 
 }

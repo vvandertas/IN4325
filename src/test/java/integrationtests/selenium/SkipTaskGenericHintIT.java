@@ -3,6 +3,7 @@ package integrationtests.selenium;
 import com.vdtas.models.participants.ParticipantType;
 import org.junit.Test;
 
+import static com.vdtas.helpers.Routes.QUESTIONNAIRE;
 import static com.vdtas.models.Task.GENERIC_HINT;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -34,5 +35,23 @@ public class SkipTaskGenericHintIT extends SkipTaskIT {
         String hints = experimentsPage.findHints();
         assertNotNull(hints);
         assertEquals(GENERIC_HINT, hints);
+    }
+
+    @Test
+    public void skipAllTasks() {
+        // Load the experiments page for a participant of type participantType
+        experimentsPage.open(ParticipantType.GENERICHINT.toString());
+
+        // First make sure we have search results
+        experimentsPage.submitTestQuery();
+
+        // Skip first question
+        experimentsPage.skipQuestion();
+
+        // as well as the second question
+        experimentsPage.skipQuestion();
+
+        // now validate that we move to the questionnaire
+        experimentsPage.shouldBeOnPage(QUESTIONNAIRE);
     }
 }

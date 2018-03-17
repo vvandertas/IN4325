@@ -10,7 +10,7 @@ import integrationtests.testhelpers.SeleniumTest;
  * @author vvandertas
  */
 public class LandingIT extends SeleniumTest{
-    LandingPage landingPage;
+    private LandingPage landingPage;
     @Before
     public void setup() {
         landingPage = new LandingPage(driver);

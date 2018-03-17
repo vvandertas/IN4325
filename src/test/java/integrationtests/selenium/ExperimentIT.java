@@ -15,7 +15,7 @@ import integrationtests.testhelpers.SeleniumTest;
  */
 public class ExperimentIT extends SeleniumTest {
 
-    ExperimentsPage experimentsPage;
+    protected ExperimentsPage experimentsPage;
 
     @Before
     public void setup() {
@@ -86,33 +86,11 @@ public class ExperimentIT extends SeleniumTest {
     }
 
 
-    @Test
-    public void captureClicksTest() {
-        initiateExperiment(ParticipantType.GENERICHINT);
-
-        // Submit the test query
-        experimentsPage.submitTestQuery();
-
-        // Click first link
-        String href = experimentsPage.clickFirstLink();
-        //TODO: Do something with this?
-
-        // Ensure we are still on the same page
-        // Make sure the noresults tag is not displayed
-        assertFalse(experimentsPage.noresultsIsDisplayed());
-
-        // Validate paging is present twice
-        assertEquals(2, experimentsPage.countDisplayedPaging());
-
-        // Validate we have 20 results displayed
-        assertEquals(20, experimentsPage.countDisplayedSearchResults());
-    }
-
-    private void initiateExperiment(ParticipantType participantType) {
+    protected void initiateExperiment(ParticipantType participantType) {
         experimentsPage.open(participantType.toString());
     }
 
-    private void validateInitialQuestion() {
+    protected void validateInitialQuestion() {
         String question = experimentsPage.findQuestion();
         assertNotNull(question);
         assertEquals("expecting the question for task 1", "This is a test question", question);

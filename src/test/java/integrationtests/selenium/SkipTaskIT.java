@@ -2,12 +2,9 @@ package integrationtests.selenium;
 
 import com.vdtas.models.participants.ParticipantType;
 import integrationtests.testhelpers.ExperimentsPage;
-import integrationtests.testhelpers.LandingPage;
 import integrationtests.testhelpers.SeleniumTest;
 import org.junit.Before;
-import org.junit.Test;
 
-import static com.vdtas.models.Task.GENERIC_HINT;
 import static org.junit.Assert.*;
 
 /**

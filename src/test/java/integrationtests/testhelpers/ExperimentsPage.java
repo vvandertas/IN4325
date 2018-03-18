@@ -133,10 +133,6 @@ public class ExperimentsPage extends BasePage {
         wait.until(ExpectedConditions.invisibilityOf(failureModal));
     }
 
-    public String getUrlAnswer() {
-        return urlField.getAttribute("value");
-    }
-
     public String getTextAnswer() {
         return answerField.getAttribute("value");
     }

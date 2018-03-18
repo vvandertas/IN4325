@@ -81,7 +81,7 @@ public class TaskHelperTest {
         List<String> keywords = ImmutableList.of("keyword", "answer");
         when(mockedTaskDao.findKeywordsForTask(1)).thenReturn(keywords);
 
-        TaskResponse taskResponse = new TaskResponse(1, "url", "The answer to this question is Keyword");
+        TaskResponse taskResponse = new TaskResponse(1,  "The answer to this question is Keyword");
         assertTrue(taskHelper.validateTask(taskResponse));
     }
 
@@ -90,7 +90,7 @@ public class TaskHelperTest {
         List<String> keywords = ImmutableList.of("keyword", "answer");
         when(mockedTaskDao.findKeywordsForTask(1)).thenReturn(keywords);
 
-        TaskResponse taskResponse = new TaskResponse(1, "url", "I don't understand the question");
+        TaskResponse taskResponse = new TaskResponse(1,  "I don't understand the question");
         assertFalse(taskHelper.validateTask(taskResponse));
     }
 
@@ -99,7 +99,7 @@ public class TaskHelperTest {
         List<String> keywords = ImmutableList.of("keyword", "answer");
         when(mockedTaskDao.findKeywordsForTask(1)).thenReturn(keywords);
 
-        TaskResponse taskResponse = new TaskResponse(1, "url", "Keyword");
+        TaskResponse taskResponse = new TaskResponse(1,  "Keyword");
         assertFalse(taskHelper.validateTask(taskResponse));
     }
 }

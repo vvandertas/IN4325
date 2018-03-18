@@ -56,7 +56,5 @@ public class ValidateAnswerIT extends SeleniumTest {
 
         // Make sure the answer fields have been cleared
         assertTrue(StringUtils.isEmpty(experimentsPage.getTextAnswer()));
-        assertTrue(StringUtils.isEmpty(experimentsPage.getUrlAnswer()));
-
     }
 }

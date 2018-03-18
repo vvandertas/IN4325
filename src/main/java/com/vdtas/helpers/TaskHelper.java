@@ -60,8 +60,6 @@ public class TaskHelper {
     public boolean validateTask(TaskResponse taskResponse) {
         List<String> keywordsForTask = taskDao.findKeywordsForTask(taskResponse.getTaskId());
 
-        // TODO: Do something with submitted url
-
         // Validate content of answer using a regular expression
         String regex = String.join("", keywordsForTask.stream().map(s -> "(?=.*" + s + ")").collect(Collectors.toList()));
         Pattern pattern = Pattern.compile(regex);

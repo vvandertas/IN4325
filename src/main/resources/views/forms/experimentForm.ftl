@@ -19,13 +19,6 @@
                 <input type="text" class="form-control" id="answer">
             </div>
         </div>
-        <div class="form-group row">
-            <label for="url" class="col-sm-2 col-form-label">URL</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" id="url" name="url">
-            </div>
-        </div>
-
         <input type="hidden" name="taskId" id="taskId">
         <button type="submit" class="btn btn-bing">Submit</button>
     </form>

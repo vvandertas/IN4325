@@ -5,6 +5,7 @@ import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
 import com.vdtas.models.participants.ParticipantType;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import integrationtests.testhelpers.ExperimentsPage;
@@ -65,7 +66,7 @@ public class ExperimentIT extends SeleniumTest {
         // and validate its content
         String hints = experimentsPage.findHints();
         assertNotNull(hints);
-        assertEquals(GENERIC_HINTS, hints);
+        assertEquals(StringUtils.join(GENERIC_HINTS, "\n"), hints);
     }
 
     @Test

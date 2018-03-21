@@ -1,6 +1,7 @@
 package integrationtests.selenium;
 
 import com.vdtas.models.participants.ParticipantType;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 
 import static com.vdtas.helpers.Routes.QUESTIONNAIRE;
@@ -34,7 +35,7 @@ public class SkipTaskGenericHintIT extends SkipTaskIT {
         // and validate its content
         String hints = experimentsPage.findHints();
         assertNotNull(hints);
-        assertEquals(GENERIC_HINTS, hints);
+        assertEquals(StringUtils.join(GENERIC_HINTS, "\n"), hints);
     }
 
     @Test

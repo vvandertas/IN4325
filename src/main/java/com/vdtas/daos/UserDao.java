@@ -1,10 +1,10 @@
 package com.vdtas.daos;
 
 import com.vdtas.models.User;
-import com.vdtas.models.participants.Participant;
+import org.jdbi.v3.sqlobject.config.KeyColumn;
 import org.jdbi.v3.sqlobject.config.RegisterBeanMapper;
+import org.jdbi.v3.sqlobject.config.ValueColumn;
 import org.jdbi.v3.sqlobject.customizer.Bind;
-import org.jdbi.v3.sqlobject.customizer.BindList;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
@@ -64,8 +64,9 @@ public interface UserDao {
      *
      * @return a mapping from participantType to count
      */
-    @SqlQuery("SELECT COUNT(u.participant_type) FROM users u GROUP BY participant_type;")
-    @RegisterBeanMapper(Participant.class)
+    @SqlQuery("SELECT participant_type, COUNT(u.participant_type) as c FROM users u GROUP BY participant_type;")
+    @KeyColumn("participant_type")
+    @ValueColumn("c")
     Map<String, Integer> getParticipantCounts();
 
     /**

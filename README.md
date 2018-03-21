@@ -16,6 +16,8 @@ This allows us to reproduce the study as described in the following [paper](http
 * A Bing Web Search API Key
 
 ## Running the project
+First make sure that the java compiler for this project runs command line parameter '-parameters'. This allows jdbi to infer query bindings based on method parameters without requiring '@Bind' annotations.
+
 To run the project you can simple run the following command:  
 ```
 mvn jooby:run -Dbing.apiKey=[YOUR KEY]

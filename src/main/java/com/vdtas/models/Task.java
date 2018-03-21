@@ -1,10 +1,17 @@
 package com.vdtas.models;
 
+import com.google.common.collect.ImmutableList;
+
+import java.util.List;
+
 /**
  * @author vvandertas
  */
 public class Task {
-    public static final String GENERIC_HINT = "The generic hint we show for all tasks";
+    public static final List<String> GENERIC_HINTS =
+            ImmutableList.of("Split the question into 2 or more logical parts",
+                    "Find answers to the parts of the question",
+                    "Use answers to the parts of the question to find the answer to the full question");
 
     private int id;
     private String question;

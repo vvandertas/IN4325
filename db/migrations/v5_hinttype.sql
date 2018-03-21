@@ -1,0 +1,1 @@
+ALTER TABLE hints ADD COLUMN hint_type VARCHAR(50);

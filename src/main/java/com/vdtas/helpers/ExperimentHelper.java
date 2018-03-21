@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import static com.vdtas.models.Task.GENERIC_HINT;
+import static com.vdtas.models.Task.GENERIC_HINTS;
 
 
 /**
@@ -69,11 +69,17 @@ public class ExperimentHelper {
             // Find the correct hint to show
             switch (participantType) {
                 case GENERICHINT:
-                    hints.add(new Hint(0, task.getId(), GENERIC_HINT));
+                    GENERIC_HINTS.forEach(hint -> {
+                        hints.add(new Hint(task.getId(), hint, HintType.GENERIC));
+                    });
                     break;
                 case SPECIFICHINT:
-                    // Find all hints for task
-                    hints.addAll(hintDao.findByTaskId(task.getId()));
+                    // Find all specific hints for the task
+                    hints.addAll(hintDao.findByTaskIdAndType(task.getId(), HintType.SPECIFIC.toString()));
+                    break;
+                case ADVERSARIALHINT:
+                    // Find all adversarial hints for the task
+                    hints.addAll(hintDao.findByTaskIdAndType(task.getId(), HintType.ADVERSARIAL.toString()));
                     break;
                 default:
                     break;

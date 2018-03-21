@@ -4,7 +4,7 @@ import com.vdtas.models.participants.ParticipantType;
 import org.junit.Test;
 
 import static com.vdtas.helpers.Routes.QUESTIONNAIRE;
-import static com.vdtas.models.Task.GENERIC_HINT;
+import static com.vdtas.models.Task.GENERIC_HINTS;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -34,7 +34,7 @@ public class SkipTaskGenericHintIT extends SkipTaskIT {
         // and validate its content
         String hints = experimentsPage.findHints();
         assertNotNull(hints);
-        assertEquals(GENERIC_HINT, hints);
+        assertEquals(GENERIC_HINTS, hints);
     }
 
     @Test

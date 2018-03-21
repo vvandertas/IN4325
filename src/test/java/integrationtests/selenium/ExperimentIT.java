@@ -1,6 +1,6 @@
 package integrationtests.selenium;
 
-import static com.vdtas.models.Task.GENERIC_HINT;
+import static com.vdtas.models.Task.GENERIC_HINTS;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.*;
 
@@ -65,7 +65,7 @@ public class ExperimentIT extends SeleniumTest {
         // and validate its content
         String hints = experimentsPage.findHints();
         assertNotNull(hints);
-        assertEquals(GENERIC_HINT, hints);
+        assertEquals(GENERIC_HINTS, hints);
     }
 
     @Test

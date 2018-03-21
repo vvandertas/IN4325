@@ -12,6 +12,7 @@ import org.mockito.Mockito;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -48,10 +49,10 @@ public class ExperimentHelperTest {
         // Create a task for the userSession
         Task task = new Task(1, "testName", "This is a test question");
 
-        Hint hint1 = new Hint(1, task.getId(), "This is specific hint 1 for task 1");
-        Hint hint2 = new Hint(2, task.getId(), "This is specific hint 2 for task 1");
+        Hint hint1 = new Hint(1, task.getId(), "This is specific hint 1 for task 1", HintType.SPECIFIC);
+        Hint hint2 = new Hint(2, task.getId(), "This is specific hint 2 for task 1", HintType.SPECIFIC);
 
-        when(mockedHintDao.findByTaskId(1)).thenReturn(ImmutableList.of(hint1, hint2));
+        when(mockedHintDao.findByTaskIdAndType(1, HintType.SPECIFIC.toString())).thenReturn(ImmutableList.of(hint1, hint2));
 
         // make sure a user session exists
         UUID id = mockUserId(true);
@@ -67,8 +68,8 @@ public class ExperimentHelperTest {
         // now finding the generic hint
         user.setParticipantType(ParticipantType.GENERICHINT);
         hints = experimentHelper.findCurrentHints(user, task);
-        assertEquals(1, hints.size());
-        assertEquals(Task.GENERIC_HINT, hints.get(0).getHint());
+        assertEquals(3, hints.size());
+        assertEquals(Task.GENERIC_HINTS, hints.stream().map(Hint::getHint).collect(Collectors.toList()));
 
         // Update user to no hint
         user.setParticipantType(ParticipantType.NOHINT);

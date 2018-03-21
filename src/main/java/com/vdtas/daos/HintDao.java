@@ -41,7 +41,7 @@ public interface HintDao {
      * @param taskId task id
      * @return List of hints
      */
-    @SqlQuery("SELECT * FROM hints WHERE task_id=:taskId ORDER BY id ASC")
+    @SqlQuery("SELECT * FROM hints WHERE task_id=:taskId and hint_type = :hintType ORDER BY id ASC")
     @RegisterBeanMapper(Hint.class)
-    List<Hint> findByTaskId(int taskId);
+    List<Hint> findByTaskIdAndType(int taskId, String hintType);
 }

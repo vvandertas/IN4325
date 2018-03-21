@@ -33,6 +33,7 @@ h1 {
 h2 {
     font-size: 18px;
     clear: left;
+    margin-top:10px;
 }
 
 h3 {
@@ -75,8 +76,9 @@ h3 {
 
 #logo {
     padding: 15px;
-    float: right;
+    float: left;
     border-left: 2px solid #ccc;
+    margin-bottom: 10px;
 }
 
 #query {
@@ -122,4 +124,15 @@ h3 a:link {
     color: #fff !important;
     background-color: #087 !important;
     border-color: #087 !important;
+}
+
+.container {
+    margin-top: 25px;
+}
+
+.form-label {
+    font-weight: bold;
+}
+#skip {
+    float:right;
 }

@@ -16,7 +16,7 @@ $('document').ready(function () {
                 console.log("data: ", data);
 
                 if (data.task !== "null") {
-                    showTaskInfo(data.task, data.hints);
+                    showTaskInfo(data.task, data.hints, data.task_count);
                     clearAnswerForm();
                 } else {
                     // TODO: Error or go to questionnaire
@@ -36,7 +36,7 @@ $('document').ready(function () {
      * @param task
      * @param hints
      */
-    function showTaskInfo(task, hints) {
+    function showTaskInfo(task, hints, taskCount) {
         // Show no results yet.
         $("#mainline, #paging1, #paging2").hide();
         $("#noresults").show();
@@ -44,6 +44,7 @@ $('document').ready(function () {
         // Show experiments div
         $("#experiment").show();
 
+        $("#question-label").html("Question " + task.id + " of " + taskCount);
         $("#question").html(task.question);
         $("#taskId").val(task.id);
         $("#flags").val(task.flags);

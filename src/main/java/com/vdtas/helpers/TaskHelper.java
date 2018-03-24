@@ -71,4 +71,8 @@ public class TaskHelper {
         }
     }
 
+    public int getTaskCount() {
+        return taskDao.getTaskCount();
+    }
+
 }

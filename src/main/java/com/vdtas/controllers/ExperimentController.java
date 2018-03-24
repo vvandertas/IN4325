@@ -78,10 +78,13 @@ public class ExperimentController {
             return Results.json(ImmutableMap.of("task", "null"));
         }
 
+        // Get the total number of tasks
+        int taskCount = taskHelper.getTaskCount();
+
         // Find all hints for the current task.
         List<Hint> hints = experimentHelper.findCurrentHints(user, task);
 
-        Map<String, Object> results = ImmutableMap.of("task", task, "hints", hints);
+        Map<String, Object> results = ImmutableMap.of("task", task, "hints", hints, "task_count", taskCount);
         return Results.json(results);
     }
 

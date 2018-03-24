@@ -44,4 +44,12 @@ public interface TaskDao {
     @SqlQuery("SELECT keyword FROM keywords WHERE task_id = :taskId")
     List<String> findKeywordsForTask(int taskId);
 
+    /**
+     * Count the number of tasks
+     * 
+     * @return number of tasks
+     */
+    @SqlQuery("SELECT count(*) FROM tasks")
+    int getTaskCount();
+
 }

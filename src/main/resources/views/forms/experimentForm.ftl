@@ -1,7 +1,7 @@
 <div id="experiment" class="col-md-4 container" style="margin-top: 25px; display: none">
     <form id="experimentForm" enctype="application/x-www-form-urlencoded" action="/validate" method="post">
         <div class="form-group">
-            <label for="question" class="form-label">Question</label>
+            <label for="question" class="form-label" id="question-label">Question</label>
             <p id="question"></p>
         </div>
         <div id="hints-div" class="form-group">

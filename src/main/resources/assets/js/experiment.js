@@ -46,6 +46,7 @@ $('document').ready(function () {
 
         $("#question").html(task.question);
         $("#taskId").val(task.id);
+        $("#flags").val(task.flags);
 
         switch (hints.length) {
             case 0:

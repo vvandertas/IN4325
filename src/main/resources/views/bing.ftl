@@ -20,6 +20,8 @@
                     <h2>Bing Web Search API Integration</h2>
                     <input type="text" name="searchQuery" id="term" placeholder="Search the Web" autocomplete=off>
 
+                    <input type="hidden" name="searchFlags" id="flags" >
+
                     <!-- these hidden fields control paging -->
                     <input type=hidden name="count" value="20">
                     <input type=hidden name="offset" value="0">

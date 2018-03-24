@@ -15,19 +15,22 @@ public class Task {
 
     private int id;
     private String question;
+    private String flags;
     private String name;
 
     public Task() {
     }
 
-    public Task(String question, String name) {
+    public Task(String question, String flags, String name) {
         this.question = question;
+        this.flags = flags;
         this.name = name;
     }
 
-    public Task(int id, String question, String name) {
+    public Task(int id, String question, String flags, String name) {
         this.id = id;
         this.question = question;
+        this.flags = flags;
         this.name = name;
     }
 
@@ -46,6 +49,14 @@ public class Task {
 
     public void setQuestion(String question) {
         this.question = question;
+    }
+
+    public String getFlags() {
+        return flags;
+    }
+
+    public void setFlags(String flags) {
+        this.flags = flags;
     }
 
     public String getName() {

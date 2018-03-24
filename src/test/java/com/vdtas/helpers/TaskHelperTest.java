@@ -39,7 +39,7 @@ public class TaskHelperTest {
         User user = new User(UUID.randomUUID(), ParticipantType.NOHINT);
         user.setCurrentTaskId(2);
 
-        Task expectedTask = new Task(3, "Nice Question!", "with a name");
+        Task expectedTask = new Task(3, "Nice Question!", "-'entire question'", "with a name");
         when(mockedTaskDao.findById(user.getCurrentTaskId() + 1)).thenReturn(expectedTask);
 
         boolean hasNext = taskHelper.getNextTask(user);

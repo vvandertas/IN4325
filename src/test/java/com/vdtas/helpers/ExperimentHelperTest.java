@@ -47,7 +47,7 @@ public class ExperimentHelperTest {
     @Test
     public void findHint_withCurrentTask() throws Exception {
         // Create a task for the userSession
-        Task task = new Task(1, "testName", "This is a test question");
+        Task task = new Task(1, "testName", "-'entire question'", "This is a test question");
 
         Hint hint1 = new Hint(1, task.getId(), "This is specific hint 1 for task 1", HintType.SPECIFIC);
         Hint hint2 = new Hint(2, task.getId(), "This is specific hint 2 for task 1", HintType.SPECIFIC);

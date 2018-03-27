@@ -67,10 +67,6 @@
                 </div>
             </div>
 
-            <div id="json">
-                <h3><a href="#">JSON</a></h3>
-                <div id="_json" style="display: none"></div>
-            </div>
         </div>
         <#include "forms/experimentForm.ftl">
     </div>

@@ -55,17 +55,6 @@ $('document').ready(function () {
         });
     }
 
-    // show or hide request json
-    $("#json").on("click", function(e) {
-        e.preventDefault();
-
-        if($("#_json").css('display') === 'none') {
-            $("#_json").show('slow');
-        } else {
-            $("#_json").hide('slow');
-        }
-    });
-
 
     // get the host portion of a URL, stripping out search result formatting and www too
     function getHost(url) {

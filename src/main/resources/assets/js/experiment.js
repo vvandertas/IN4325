@@ -33,8 +33,9 @@ $('document').ready(function () {
     /**
      * Show the question and hints for the current task and user
      *
-     * @param task
-     * @param hints
+     * @param task - current task
+     * @param hints - hints for current task (can be empty)
+     * @param taskCount - total task count
      */
     function showTaskInfo(task, hints, taskCount) {
         // Show no results yet.

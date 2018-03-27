@@ -119,6 +119,8 @@ public class ExperimentsPage extends BasePage {
         if(expectFailure) {
             WebDriverWait wait = new WebDriverWait(driver, 10);
             wait.until(ExpectedConditions.visibilityOf(failureModal));
+        } else {
+            waitForAjax();
         }
 
     }

@@ -13,4 +13,4 @@ VALUES(1, 'SPECIFIC','Find what is senescence'), (1, 'SPECIFIC','Find who does n
   (3,'ADVERSARIAL','Who is George?'),
   (4,'ADVERSARIAL','Where is the Somme River?');
 
-INSERT INTO keywords(task_id, keyword) VALUES(1,'atlas'),(1,'mercury');
+INSERT INTO keywords(task_id, keyword) VALUES(1,'hydra'),(2,'quirinus'),(3,'dinosaur'),(4,'cherokee');

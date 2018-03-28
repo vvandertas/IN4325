@@ -70,9 +70,6 @@ public class TaskHelperTest {
         verify(mockedUserDao, never()).updateTaskId(user.getId(), -1);
     }
 
-    // TODO: Add test for url in task response
-
-
     /**
      * Validate the text part of a task response
      */
@@ -82,6 +79,12 @@ public class TaskHelperTest {
         when(mockedTaskDao.findKeywordsForTask(1)).thenReturn(keywords);
 
         TaskResponse taskResponse = new TaskResponse(1,  "The answer to this question is Keyword");
+        assertTrue(taskHelper.validateTask(taskResponse));
+
+        taskResponse = new TaskResponse(1,  "The keyword is answer");
+        assertTrue(taskHelper.validateTask(taskResponse));
+
+        taskResponse = new TaskResponse(1,  "KEYWORD ANSWER");
         assertTrue(taskHelper.validateTask(taskResponse));
     }
 
@@ -101,5 +104,30 @@ public class TaskHelperTest {
 
         TaskResponse taskResponse = new TaskResponse(1,  "Keyword");
         assertFalse(taskHelper.validateTask(taskResponse));
+    }
+
+    @Test
+    public void validateTaskResponse_correctWithTypo() {
+        List<String> keywords = ImmutableList.of("atlas|altas");
+        when(mockedTaskDao.findKeywordsForTask(1)).thenReturn(keywords);
+
+        TaskResponse taskResponse = new TaskResponse(1,  "altas");
+        assertTrue(taskHelper.validateTask(taskResponse));
+
+        taskResponse = new TaskResponse(1,  "atlas");
+        assertTrue(taskHelper.validateTask(taskResponse));
+
+        keywords = ImmutableList.of("atlas|altas", "mercury|murcery");
+        when(mockedTaskDao.findKeywordsForTask(2)).thenReturn(keywords);
+
+        taskResponse = new TaskResponse(2,  "altas and mercury");
+        assertTrue(taskHelper.validateTask(taskResponse));
+
+        taskResponse = new TaskResponse(2,  "mercury and atlas");
+        assertTrue(taskHelper.validateTask(taskResponse));
+
+        taskResponse = new TaskResponse(2,  "murcery and atlas");
+        assertTrue(taskHelper.validateTask(taskResponse));
+
     }
 }

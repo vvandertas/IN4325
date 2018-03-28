@@ -57,4 +57,28 @@ public class ValidateAnswerIT extends SeleniumTest {
         // Make sure the answer fields have been cleared
         assertTrue(StringUtils.isEmpty(experimentsPage.getTextAnswer()));
     }
+
+    @Test
+    public void validateAnswerType() {
+        // First make sure we have search results
+        experimentsPage.open(ParticipantType.GENERICHINT.toString());
+        experimentsPage.submitTestQuery();
+
+        // and finally submit the correct answer
+        experimentsPage.submitAnswer("Altas and mercury", false);
+        assertFalse("Failure modal should not be present",experimentsPage.failureModalVisible());
+
+        // validate that we have moved to the next task by confirming the search results are no longer displayed
+        // Make sure the noresults tag is displayed
+        assertTrue(experimentsPage.noresultsIsDisplayed());
+
+        // make sure no search results are displayed
+        assertEquals(0, experimentsPage.countDisplayedSearchResults());
+
+        // and no paging elements are displayed
+        assertEquals(0, experimentsPage.countDisplayedPaging());
+
+        // Make sure the answer fields have been cleared
+        assertTrue(StringUtils.isEmpty(experimentsPage.getTextAnswer()));
+    }
 }

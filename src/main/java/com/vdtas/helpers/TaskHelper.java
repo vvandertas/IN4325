@@ -60,15 +60,14 @@ public class TaskHelper {
     public boolean validateTask(TaskResponse taskResponse) {
         List<String> keywordsForTask = taskDao.findKeywordsForTask(taskResponse.getTaskId());
 
-        // Validate content of answer using a regular expression
-        String regex = String.join("", keywordsForTask.stream().map(s -> "(?=.*" + s + ")").collect(Collectors.toList()));
-        Pattern pattern = Pattern.compile(regex);
-
-        if(pattern.matcher(taskResponse.getText().toLowerCase()).find()){
-            return true;
-        } else {
-            return false;
+        // Validate content of an answer using a regular expression per required keyword (and its allowed typo options, pipe delimited)
+        for (String keyword : keywordsForTask.stream().map(s -> ".*(" + s + ").*").collect(Collectors.toList())) {
+            if(!taskResponse.getText().toLowerCase().matches(keyword)){
+                return false;
+            }
         }
+
+        return true;
     }
 
     public int getTaskCount() {

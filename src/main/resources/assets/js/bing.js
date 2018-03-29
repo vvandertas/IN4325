@@ -197,7 +197,12 @@ $('document').ready(function () {
         var count = parseInt($("[name=count]").val(), 10);
 
         // Only update the text here
-        $(".resultInfo").html("Results " + (offset + 1) + " to " + (offset + count) + " of about " + results.webPages.totalEstimatedMatches + ".");
+        if(!results.webPages){
+            $(".resultInfo").html("No results.");
+        } else {
+            var maxPerPage = Math.min((offset + count), results.webPages.totalEstimatedMatches);
+            $(".resultInfo").html("Results " + (offset + 1) + " to " + maxPerPage + " of about " + results.webPages.totalEstimatedMatches + ".");
+        }
         console.log("Finished updating paging info");
     }
 });

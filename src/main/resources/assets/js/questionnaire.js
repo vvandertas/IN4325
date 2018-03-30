@@ -22,8 +22,8 @@ $('document').ready(function () {
             contentType: 'application/json',
             dataType: 'json',
             success: function (data) {
-                // TODO: Redirect to exit page?
                 console.log("Finished posting questionnaire answers");
+                window.location.replace("/end");
             }, error: function (errorData) {
                 alert("error: " + JSON.stringify(errorData));
             }

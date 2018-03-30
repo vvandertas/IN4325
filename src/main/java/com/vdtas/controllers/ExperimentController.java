@@ -173,4 +173,10 @@ public class ExperimentController {
 
         return Results.json(ImmutableMap.of("success", true));
     }
+
+    @GET
+    @Path(END)
+    public Result showEndPage(@Local User user) {
+        return Results.html("end");
+    }
 }

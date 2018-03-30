@@ -8,6 +8,7 @@ public class Routes {
     public static final String EXPERIMENT = "/experiment";
     public static final String TASKDATA = "/taskData";
     public static final String QUESTIONNAIRE = "/questionnaire";
+    public static final String END = "/end";
 
     public static final String SEARCH = "/search";
     public static final String CAPTURE ="/capture";

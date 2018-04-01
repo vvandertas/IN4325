@@ -1,12 +1,14 @@
 package com.vdtas.controllers;
 
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.Gson;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import com.vdtas.helpers.ExperimentHelper;
 import com.vdtas.helpers.SessionHelper;
 import com.vdtas.helpers.TaskHelper;
 import com.vdtas.models.*;
-import org.jooby.Request;
 import org.jooby.Result;
 import org.jooby.Results;
 import org.jooby.Session;
@@ -15,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.vdtas.helpers.Routes.*;
 import static com.vdtas.helpers.SessionHelper.USER_ID;
@@ -28,13 +30,17 @@ import static com.vdtas.helpers.SessionHelper.USER_ID;
 public class ExperimentController {
 
     private final Logger logger = LoggerFactory.getLogger(ExperimentController.class);
+    private final String aponeEndpoint;
+    private final String experimentId;
 
     private ExperimentHelper experimentHelper;
     private TaskHelper taskHelper;
     private SessionHelper sessionHelper;
 
     @Inject
-    public ExperimentController(ExperimentHelper experimentHelper, TaskHelper taskHelper, SessionHelper sessionHelper) {
+    public ExperimentController(@Named("apone.endpoint") String aponeEndpoint, @Named("apone.experimentId") String experimentId, ExperimentHelper experimentHelper, TaskHelper taskHelper, SessionHelper sessionHelper) {
+        this.aponeEndpoint = aponeEndpoint;
+        this.experimentId = experimentId;
         this.experimentHelper = experimentHelper;
         this.taskHelper = taskHelper;
         this.sessionHelper = sessionHelper;
@@ -49,6 +55,7 @@ public class ExperimentController {
         return Results.html("landing"); // TODO: Update landing page
     }
 
+
     @GET
     @Path(EXPERIMENT)
     public Result start(Session session, Optional<String> forceType) {
@@ -58,10 +65,16 @@ public class ExperimentController {
         // Make sure we always have task data, even though user skipped without querying.
         if(createdUser) {
             experimentHelper.createUserTaskData(UUID.fromString(session.get(USER_ID).value()), 1);
+
+            // Log an exposure event with APONE for this user
+            logger.info("Exposing user {} to apone", session.get(USER_ID).value());
+            sendAponeRequest(true ,session.get(USER_ID).value());
         }
 
         return Results.html("bing");
     }
+
+
 
     /**
      * Find current task info for a user
@@ -177,6 +190,28 @@ public class ExperimentController {
     @GET
     @Path(END)
     public Result showEndPage(@Local User user) {
+        logger.info("Logging complete event for user {}", user.getId());
+        sendAponeRequest(false, user.getId().toString());
         return Results.html("end");
+    }
+
+    /**
+     * Create the message body for sending an exposure or completed event to APONE and place the request.
+     *
+     * @param expose indicates whether this should be an exposure event or not
+     * @param userId the user id we are logging the event for
+     */
+    private void sendAponeRequest(boolean expose, String userId ) {
+        String requestBody =  new Gson().toJson(ImmutableMap.of(
+                "idconfig", experimentId, "ename", expose ? "exposure" : "completed", "idunit", userId,
+                "evalue", ImmutableMap.of("userId", userId), "etype", "JSON"));
+
+        try {
+            HttpResponse<String> response = Unirest.post(aponeEndpoint).body(requestBody).asString();
+            logger.info("Received the following response code from apone: " +  response.getStatus());
+        } catch (UnirestException e) {
+            logger.error("An error occurred when sending an event to APONE for user: {}", userId, e);
+        }
+
     }
 }
